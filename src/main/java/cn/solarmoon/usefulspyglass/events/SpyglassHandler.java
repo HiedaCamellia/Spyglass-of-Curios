@@ -5,6 +5,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import cn.solarmoon.usefulspyglass.client.usefulspyglassCilent;
@@ -17,7 +18,7 @@ public class SpyglassHandler {
     public static ItemStack offhanditem = ItemStack.EMPTY;
     public static boolean spyglassInUse = false;
     @SubscribeEvent
-    public static void spyglassUse(InputEvent.Key event) {
+    public static void spyglassUse(TickEvent.ClientTickEvent event) {
         Minecraft client = Minecraft.getInstance();
         Player player = client.player;
 
