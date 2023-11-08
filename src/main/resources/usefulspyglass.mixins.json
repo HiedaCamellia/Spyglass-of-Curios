@@ -1,11 +1,16 @@
 {
   "required": true,
+  "minVersion": "0.8",
   "package": "cn.solarmoon.usefulspyglass.mixin",
+  "refmap": "usefulspyglass.refmap.json",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "ScopingMixin"
   ],
   "client": [
-    "keydownMixin",
-    "ClickDelayMixin"
-  ]
+    "keydownMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
 }
