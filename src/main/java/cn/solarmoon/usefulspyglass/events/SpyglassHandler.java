@@ -1,50 +1,60 @@
 package cn.solarmoon.usefulspyglass.events;
 
+import cn.solarmoon.usefulspyglass.network.PacketRegister;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.client.event.InputEvent;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.LivingSwapItemsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import cn.solarmoon.usefulspyglass.client.usefulspyglassCilent;
-import top.theillusivec4.curios.api.CuriosApi;
 
 
 @Mod.EventBusSubscriber
 public class SpyglassHandler {
-    public static ItemStack spyglass = ItemStack.EMPTY;
-    public static ItemStack offhanditem = ItemStack.EMPTY;
-    public static boolean spyglassInUse = false;
+
+    private final PacketRegister packetRegister = new PacketRegister();
+    public boolean pressCheck = false;
+
     @SubscribeEvent
-    public static void spyglassUse(TickEvent.ClientTickEvent event) {
+    public void spyglassUse(TickEvent.ClientTickEvent event) {
         Minecraft client = Minecraft.getInstance();
         Player player = client.player;
 
         if (player == null) return;
-        if (usefulspyglassCilent.useSpyglass.isDown() && !player.isUsingItem() && !player.isScoping() && client.rightClickDelay == 0) {
-            CuriosApi.getCuriosInventory(player).ifPresent(handler -> {
-                handler.findCurio("spyglass", 0).ifPresent(e -> {
-                    spyglass = e.stack().copyAndClear();
-                    offhanditem = player.getOffhandItem().copyAndClear();
-                    player.setItemInHand(InteractionHand.OFF_HAND, spyglass);
-                });
-            });
-            //按下右键
-            player.startUsingItem(InteractionHand.OFF_HAND);
+        if (usefulspyglassCilent.useSpyglass.isDown() && !player.isUsingItem() && !player.isScoping()) {
+            //发包
+            packetRegister.sendPacket(player, "spyglassUse");
+            //使用望远镜
+            if (player.getOffhandItem().is(Items.SPYGLASS)) {
+                client.gameMode.useItem(player, InteractionHand.OFF_HAND);
+            }
+            //按键检查
+            pressCheck = true;
         }
-        if (!usefulspyglassCilent.useSpyglass.isDown() && player.isScoping()) {
-            CuriosApi.getCuriosInventory(player).ifPresent(handler -> {
-                handler.setEquippedCurio("spyglass", 0, spyglass);
-                player.setItemInHand(InteractionHand.OFF_HAND, offhanditem);
-            });
-            spyglass = ItemStack.EMPTY;
-            offhanditem = ItemStack.EMPTY;
+        if (!usefulspyglassCilent.useSpyglass.isDown() && pressCheck) {
+            //发包
+            packetRegister.sendPacket(player,"spyglassStop");
+            //重置按键检查
+            pressCheck = false;
         }
-
     }
+
+    @SubscribeEvent
+    public void exchangeCheck(LivingSwapItemsEvent.Hands event) {
+        Player player = Minecraft.getInstance().player;
+        if (pressCheck && player != null) {
+                packetRegister.sendPacket(player, "spyglassExchange");
+        }
+    }
+
+
 }
+
 
 
 
