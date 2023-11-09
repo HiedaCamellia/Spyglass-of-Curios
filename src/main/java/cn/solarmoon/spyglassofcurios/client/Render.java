@@ -1,4 +1,4 @@
-package cn.solarmoon.usefulspyglass.client;
+package cn.solarmoon.spyglassofcurios.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemStack;
 
 
 public interface Render {
-    
+
     void render(
             ItemStack stack,
             LivingEntity entity,

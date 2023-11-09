@@ -1,4 +1,4 @@
-package cn.solarmoon.usefulspyglass.client.models;
+package cn.solarmoon.spyglassofcurios.client.models;
 // Made with Blockbench 4.8.3
 // Exported for Minecraft version 1.17 or later with Mojang mappings
 // Paste this class into your mod and generate all required imports
@@ -10,7 +10,7 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.world.entity.LivingEntity;
 
-import static cn.solarmoon.usefulspyglass.client.Render.followBodyRotations;
+import static cn.solarmoon.spyglassofcurios.client.Render.followBodyRotations;
 
 public class SpyglassModel extends HumanoidModel<LivingEntity> {
 	private final ModelPart part1;

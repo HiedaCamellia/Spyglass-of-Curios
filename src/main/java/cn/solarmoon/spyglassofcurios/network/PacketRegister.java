@@ -1,7 +1,7 @@
-package cn.solarmoon.usefulspyglass.network;
+package cn.solarmoon.spyglassofcurios.network;
 
-import cn.solarmoon.usefulspyglass.UsefulSpyglassMod;
-import cn.solarmoon.usefulspyglass.network.handler.SpyglassUsePacket;
+import cn.solarmoon.spyglassofcurios.SpyglassOfCuriosMod;
+import cn.solarmoon.spyglassofcurios.network.handler.SpyglassUsePacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.network.NetworkDirection;
@@ -20,7 +20,7 @@ public class PacketRegister {
 
     public void register() {
 
-        SimpleChannel network = NetworkRegistry.ChannelBuilder.named(new ResourceLocation(UsefulSpyglassMod.MOD_ID, "main"))
+        SimpleChannel network = NetworkRegistry.ChannelBuilder.named(new ResourceLocation(SpyglassOfCuriosMod.MOD_ID, "main"))
                 .networkProtocolVersion(() -> "1")
                 .clientAcceptedVersions(string -> true)
                 .serverAcceptedVersions(string -> true)

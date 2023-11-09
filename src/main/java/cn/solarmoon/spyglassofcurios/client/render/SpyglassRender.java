@@ -1,8 +1,8 @@
-package cn.solarmoon.usefulspyglass.client.render;
+package cn.solarmoon.spyglassofcurios.client.render;
 
-import cn.solarmoon.usefulspyglass.UsefulSpyglassMod;
-import cn.solarmoon.usefulspyglass.client.Render;
-import cn.solarmoon.usefulspyglass.client.models.SpyglassModel;
+import cn.solarmoon.spyglassofcurios.SpyglassOfCuriosMod;
+import cn.solarmoon.spyglassofcurios.client.Render;
+import cn.solarmoon.spyglassofcurios.client.models.SpyglassModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -18,7 +18,7 @@ public class SpyglassRender implements Render {
     private final SpyglassModel model;
 
     public SpyglassRender(String texturePath, SpyglassModel model) {
-        this(UsefulSpyglassMod.id("textures/entity/curio/%s.png", texturePath), model);
+        this(SpyglassOfCuriosMod.id("textures/entity/curio/%s.png", texturePath), model);
     }
 
     public SpyglassRender(ResourceLocation texture, SpyglassModel model) {

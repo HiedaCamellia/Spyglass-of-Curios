@@ -1,14 +1,14 @@
-package cn.solarmoon.usefulspyglass;
+package cn.solarmoon.spyglassofcurios;
 
-import cn.solarmoon.usefulspyglass.events.SpyglassHandler;
-import cn.solarmoon.usefulspyglass.network.PacketRegister;
+import cn.solarmoon.spyglassofcurios.events.SpyglassHandler;
+import cn.solarmoon.spyglassofcurios.network.PacketRegister;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod("usefulspyglass")
-public class UsefulSpyglassMod {
-    public static final String MOD_ID = "usefulspyglass";
+@Mod("spyglassofcurios")
+public class SpyglassOfCuriosMod {
+    public static final String MOD_ID = "spyglassofcurios";
 
     public static ResourceLocation id(String path) {
         return new ResourceLocation(MOD_ID, path);
@@ -18,7 +18,7 @@ public class UsefulSpyglassMod {
         return new ResourceLocation(MOD_ID, String.format(path, (Object[]) args));
     }
 
-    public UsefulSpyglassMod() {
+    public SpyglassOfCuriosMod() {
         //数据包
         PacketRegister packetRegister = new PacketRegister();
         packetRegister.register();
