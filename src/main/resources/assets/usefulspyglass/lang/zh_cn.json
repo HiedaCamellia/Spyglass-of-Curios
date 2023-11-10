@@ -2,5 +2,8 @@
   "curios.identifier.spyglass": "望远镜",
 
   "category.spyglassofcurios": "饰品望远镜",
-  "key.spyglassofcurios.use": "打开望远镜"
+  "key.spyglassofcurios.use": "打开望远镜",
+
+  "tooltip.spyglassofcurios.multiplier": "§7§o倍率: %s",
+  "tooltip.spyglassofcurios.default_multiplier": "§7§o倍率: §7§o1.9"
 }

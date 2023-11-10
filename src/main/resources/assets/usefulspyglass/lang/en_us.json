@@ -1,6 +1,9 @@
 {
   "curios.identifier.spyglass": "spyglass",
 
-  "category.spyglassofcurios": "Spyglass Of Curios",
-  "key.spyglassofcurios.use": "Open Spyglass"
+  "category.spyglassofcurios": "Spyglass of Curios",
+  "key.spyglassofcurios.use": "Open Spyglass",
+
+  "tooltip.spyglassofcurios.multiplier": "§7§omultiplier: %s",
+  "tooltip.spyglassofcurios.default_multiplier": "§7§omultiplier: §7§o1.9"
 }

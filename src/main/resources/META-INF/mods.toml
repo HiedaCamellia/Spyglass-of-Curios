@@ -5,7 +5,7 @@ license="MIT"
 [[mods]]
 modId="spyglassofcurios"
 version="0.1"
-displayName="Spyglass Of Curios"
+displayName="Spyglass of Curios"
 logoFile="spyglassofcurioslogo.png"
 authors="曦月"
 description='''使你的望远镜与饰品栏兼容!'''

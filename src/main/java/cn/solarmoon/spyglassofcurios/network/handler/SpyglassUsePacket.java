@@ -1,5 +1,7 @@
 package cn.solarmoon.spyglassofcurios.network.handler;
 
+import cn.solarmoon.spyglassofcurios.client.SpyglassOfCuriosClient;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -8,6 +10,7 @@ import net.minecraft.world.item.Items;
 import net.minecraftforge.network.NetworkEvent;
 import top.theillusivec4.curios.api.CuriosApi;
 
+import java.text.DecimalFormat;
 import java.util.function.Supplier;
 
 
@@ -69,6 +72,16 @@ public class SpyglassUsePacket {
                     });
                     spyglass = ItemStack.EMPTY;
                     offhandItem = ItemStack.EMPTY;
+                }
+                case "spyglassPutNBT" -> {
+                    ItemStack spyglass = player.getUseItem();
+                    if (spyglass.is(Items.SPYGLASS)) {
+                        CompoundTag tag = spyglass.getOrCreateTag();
+                        double newMultiplier = 2.0 - SpyglassOfCuriosClient.MULTIPLIER;
+                        DecimalFormat df = new DecimalFormat("#.#");
+                        newMultiplier = Double.valueOf(df.format(newMultiplier));
+                        tag.putDouble("MULTIPLIER", newMultiplier);
+                    }
                 }
             }
         });

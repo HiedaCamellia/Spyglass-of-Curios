@@ -11,7 +11,8 @@ import org.lwjgl.glfw.GLFW;
 
 
 @Mod.EventBusSubscriber(modid = "spyglassofcurios", value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class spyglassOfCuriosClient {
+public class SpyglassOfCuriosClient {
+    //按键注册
     public static KeyMapping useSpyglass = new KeyMapping(
             "key.spyglassofcurios.use",
             KeyConflictContext.IN_GAME,
@@ -19,9 +20,11 @@ public class spyglassOfCuriosClient {
             GLFW.GLFW_KEY_C,
             "category.spyglassofcurios"
     );
-
     @SubscribeEvent
     public static void registerKeymapping(RegisterKeyMappingsEvent event){
-        event.register(spyglassOfCuriosClient.useSpyglass);
+        event.register(SpyglassOfCuriosClient.useSpyglass);
     }
+
+    //静态焦距
+    public static double MULTIPLIER = .1f;
 }
