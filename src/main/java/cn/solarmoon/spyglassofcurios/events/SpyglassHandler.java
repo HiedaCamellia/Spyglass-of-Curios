@@ -101,12 +101,13 @@ public class SpyglassHandler {
     public void onMouseScroll(InputEvent.MouseScrollingEvent event){
         Minecraft client = Minecraft.getInstance();
         LocalPlayer player = client.player;
-        if(player != null && player.isScoping() && player.getUseItem().hasTag() && client.options.getCameraType().isFirstPerson()){
-            //调整倍率
-            double newMultiplier = Mth.clamp(2 - player.getUseItem().getTag().getDouble("MULTIPLIER")-(event.getScrollDelta()/10), .1,.8);
-            SpyglassOfCuriosClient.MULTIPLIER = newMultiplier;
-            player.playSound(SoundEvents.SPYGLASS_STOP_USING, 1.0f, (float)(1.0f+(1*(1- SpyglassOfCuriosClient.MULTIPLIER)*(1- SpyglassOfCuriosClient.MULTIPLIER))));
-
+        if(player != null && player.isScoping() && client.options.getCameraType().isFirstPerson()){
+            if (player.getUseItem().hasTag()){
+                //调整倍率
+                double newMultiplier = Mth.clamp(2 - player.getUseItem().getTag().getDouble("MULTIPLIER")-(event.getScrollDelta()/7), .1,.8);
+                SpyglassOfCuriosClient.MULTIPLIER = newMultiplier;
+                player.playSound(SoundEvents.SPYGLASS_STOP_USING, 1.0f, (float)(1.0f+(1*(1- SpyglassOfCuriosClient.MULTIPLIER)*(1- SpyglassOfCuriosClient.MULTIPLIER))));
+            }
             //发包(把倍率存入独立的望远镜NBT)
             packetRegister.sendPacket(player, "spyglassPutNBT");
 
