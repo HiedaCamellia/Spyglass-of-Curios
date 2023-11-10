@@ -1,1 +1,1 @@
-![image](https://github.com/SolarMoonQAQ/Spyglass-of-Curios/blob/1.20.1-FORGE/IMG/8.gif)
+![image](https://github.com/SolarMoonQAQ/Spyglass-of-Curios/blob/1.20.1-FORGE/IMG/8.gif?raw=true)
