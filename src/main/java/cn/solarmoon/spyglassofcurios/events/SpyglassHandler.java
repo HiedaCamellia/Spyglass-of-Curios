@@ -73,7 +73,7 @@ public class SpyglassHandler {
             CompoundTag tag = spyglass.getTag();
             if (tag.contains("MULTIPLIER")) {
                 double multiplier = tag.getDouble("MULTIPLIER");
-                Component tooltip = Component.translatable("tooltip.spyglassofcurios.multiplier", "\u00A77\u00A7o" + multiplier);
+                Component tooltip = Component.translatable("tooltip.spyglassofcurios.multiplier", "§7§o" + multiplier);
                 event.getToolTip().add(tooltip);
             }
         } else if (spyglass.getItem() == Items.SPYGLASS) {

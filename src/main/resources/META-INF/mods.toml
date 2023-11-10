@@ -4,7 +4,7 @@ license="MIT"
 
 [[mods]]
 modId="spyglassofcurios"
-version="0.1"
+version="0.2.1-beta"
 displayName="Spyglass of Curios"
 logoFile="spyglassofcurioslogo.png"
 authors="曦月"
@@ -13,7 +13,7 @@ description='''使你的望远镜与饰品栏兼容!'''
 [[dependencies.spyglassofcurios]]
     modId="forge"
     mandatory=true
-    versionRange="[47.0.46,)"
+    versionRange="[47.2.0,)"
     ordering="NONE"
     side="BOTH"
 

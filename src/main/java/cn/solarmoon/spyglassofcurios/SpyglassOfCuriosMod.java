@@ -1,6 +1,5 @@
 package cn.solarmoon.spyglassofcurios;
 
-import cn.solarmoon.spyglassofcurios.events.FovEvent;
 import cn.solarmoon.spyglassofcurios.events.SpyglassHandler;
 import cn.solarmoon.spyglassofcurios.network.PacketRegister;
 import net.minecraft.resources.ResourceLocation;
