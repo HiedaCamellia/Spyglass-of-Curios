@@ -13,6 +13,8 @@ import top.theillusivec4.curios.api.CuriosApi;
 import java.text.DecimalFormat;
 import java.util.function.Supplier;
 
+import static cn.solarmoon.spyglassofcurios.client.SpyglassOfCuriosClient.renderType;
+
 
 public class SpyglassUsePacket {
 
@@ -77,10 +79,15 @@ public class SpyglassUsePacket {
                     ItemStack spyglass = player.getUseItem();
                     if (spyglass.is(Items.SPYGLASS)) {
                         CompoundTag tag = spyglass.getOrCreateTag();
-                        double newMultiplier = 2.0 - SpyglassOfCuriosClient.MULTIPLIER;
-                        DecimalFormat df = new DecimalFormat("#.#");
-                        newMultiplier = Double.valueOf(df.format(newMultiplier));
+                        double newMultiplier = 10 - SpyglassOfCuriosClient.MULTIPLIER*10;
                         tag.putDouble("MULTIPLIER", newMultiplier);
+                    }
+                }
+                case "spyglassPutNBTRender" -> {
+                    ItemStack spyglass = player.getMainHandItem();
+                    if (spyglass.is(Items.SPYGLASS)) {
+                        CompoundTag tag = spyglass.getOrCreateTag();
+                        tag.putString("renderType", renderType);
                     }
                 }
             }

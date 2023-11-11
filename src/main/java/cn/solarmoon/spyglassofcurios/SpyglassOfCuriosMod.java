@@ -10,14 +10,6 @@ import net.minecraftforge.fml.common.Mod;
 public class SpyglassOfCuriosMod {
     public static final String MOD_ID = "spyglassofcurios";
 
-    //模型材质
-    public static ResourceLocation id(String path) {
-        return new ResourceLocation(MOD_ID, path);
-    }
-    public static ResourceLocation id(String path, String... args) {
-        return new ResourceLocation(MOD_ID, String.format(path, (Object[]) args));
-    }
-
     public SpyglassOfCuriosMod() {
         //数据包
         PacketRegister packetRegister = new PacketRegister();

@@ -28,12 +28,10 @@ public class PacketRegister {
 
         instance = network;
 
-        SpyglassUsePacket spyglassUsePacket = new SpyglassUsePacket("spyglassUse");
-
         network.messageBuilder(SpyglassUsePacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
                 .decoder(SpyglassUsePacket::decode)
                 .encoder(SpyglassUsePacket::encode)
-                .consumerMainThread(spyglassUsePacket::handle)
+                .consumerMainThread((packet, contextSupplier) -> packet.handle(packet, contextSupplier))
                 .add();
     }
 
