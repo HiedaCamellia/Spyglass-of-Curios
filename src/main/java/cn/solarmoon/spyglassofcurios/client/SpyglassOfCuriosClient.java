@@ -2,7 +2,9 @@ package cn.solarmoon.spyglassofcurios.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.settings.KeyConflictContext;
@@ -34,6 +36,10 @@ public class SpyglassOfCuriosClient {
 
     //静态渲染识别符
     public static String renderType = "back_waist";
+
+    //
+    public static ItemStack spyglass = ItemStack.EMPTY;
+    public static ItemStack offhandItem = ItemStack.EMPTY;
 
     //注册望远镜渲染
     @SubscribeEvent

@@ -12,7 +12,7 @@ import top.theillusivec4.curios.api.CuriosApi;
 
 import java.util.function.Supplier;
 
-import static cn.solarmoon.spyglassofcurios.client.SpyglassOfCuriosClient.renderType;
+import static cn.solarmoon.spyglassofcurios.client.SpyglassOfCuriosClient.*;
 
 
 public class SpyglassUsePacket {
@@ -32,8 +32,6 @@ public class SpyglassUsePacket {
         return new SpyglassUsePacket(spyglassHandle);
     }
 
-    public ItemStack spyglass = ItemStack.EMPTY;
-    public ItemStack offhandItem = ItemStack.EMPTY;
 
     public void handle(SpyglassUsePacket packet, Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
