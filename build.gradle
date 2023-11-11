@@ -21,8 +21,13 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.spongepowered.mixin'
 
-version = "1.0"
+version = "${mod_version}"
 group = 'com.solarmoon.spyglassofcurios'
+
+ext {
+    mod_version = '1.1'
+}
+
 
 base {
     archivesName = 'spyglassofcurios-forge'
