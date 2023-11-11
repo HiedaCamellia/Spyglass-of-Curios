@@ -10,7 +10,6 @@ import net.minecraft.world.item.Items;
 import net.minecraftforge.network.NetworkEvent;
 import top.theillusivec4.curios.api.CuriosApi;
 
-import java.text.DecimalFormat;
 import java.util.function.Supplier;
 
 import static cn.solarmoon.spyglassofcurios.client.SpyglassOfCuriosClient.renderType;

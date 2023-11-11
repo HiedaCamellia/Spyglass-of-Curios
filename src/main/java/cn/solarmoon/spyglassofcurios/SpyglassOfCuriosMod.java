@@ -2,7 +2,6 @@ package cn.solarmoon.spyglassofcurios;
 
 import cn.solarmoon.spyglassofcurios.events.SpyglassHandler;
 import cn.solarmoon.spyglassofcurios.network.PacketRegister;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 

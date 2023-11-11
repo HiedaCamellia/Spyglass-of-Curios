@@ -22,7 +22,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.Objects;
-import java.util.Optional;
 
 import static cn.solarmoon.spyglassofcurios.client.SpyglassOfCuriosClient.renderType;
 

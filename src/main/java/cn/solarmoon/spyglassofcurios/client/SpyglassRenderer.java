@@ -10,17 +10,12 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.client.ICurioRenderer;
-
-import javax.swing.text.html.Option;
-import java.util.Optional;
 
 
 public class SpyglassRenderer implements ICurioRenderer {
@@ -49,7 +44,7 @@ public class SpyglassRenderer implements ICurioRenderer {
             nbt = stack.getTag().getString("renderType");
         } else {
             nbt = "back_waist";
-        };
+        }
         if ("back_waist".equals(nbt)) {
             if(living.isCrouching()) {
                 matrixStack.translate(0.0F, 0.14F, 0.3F);
