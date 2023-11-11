@@ -40,8 +40,12 @@ public class SpyglassRenderer implements ICurioRenderer {
         matrixStack.pushPose();
         ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
         LivingEntity living = slotContext.entity();
-        if (stack.hasTag()) {
-            nbt = stack.getTag().getString("renderType");
+        if (stack.getTag() != null) {
+            if (stack.getTag().contains("renderType")) {
+                nbt = stack.getTag().getString("renderType");
+            } else {
+                nbt = "back_waist";
+            }
         } else {
             nbt = "back_waist";
         }
