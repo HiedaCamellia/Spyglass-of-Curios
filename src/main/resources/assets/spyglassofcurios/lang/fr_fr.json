@@ -1,0 +1,13 @@
+{
+  "curios.identifier.spyglass": "longue-vue",
+
+  "category.spyglassofcurios": "Accessoires : Longue-vue",
+  "key.spyglassofcurios.use": "Regarder à travers la longue-vue",
+
+  "tooltip.spyglassofcurios.multiplier": "§7§omultiplicateur : %s",
+  "tooltip.spyglassofcurios.default_multiplier": "§7§omultiplicateur : §7§o9",
+
+  "switch.spyglassofcurios.head": "§6Type de rendu : §fTête",
+  "switch.spyglassofcurios.back_waist": "§6Type de rendu : §fBas du dos",
+  "switch.spyglassofcurios.indescribable": "§6RType de rendu : §fIndescriptible"
+}
