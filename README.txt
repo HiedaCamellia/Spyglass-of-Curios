@@ -1,1 +1,0 @@
-![simple demonstration](https://cdnjson.com/images/2023/11/11/8.gif)
