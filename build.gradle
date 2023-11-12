@@ -21,12 +21,12 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.spongepowered.mixin'
 
-version = 1.1
+version = 1.2
 group = 'com.solarmoon.spyglassofcurios'
 
 
 base {
-    archivesName = 'spyglassofcurios-forge'
+    archivesName = 'spyglassofcurios-forge-1.20.1'
 }
 
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
