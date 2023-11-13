@@ -37,9 +37,14 @@ public class SpyglassOfCuriosClient {
     //静态渲染识别符
     public static String renderType = "back_waist";
 
+    //客户端按键检查
+    public static boolean pressCheck = false;
+    public static boolean doubleSwap = false;
+
     //客户端静态物品栈
     public static ItemStack spyglass = ItemStack.EMPTY;
     public static ItemStack offhandItem = ItemStack.EMPTY;
+    public static ItemStack mainhandItem = ItemStack.EMPTY;
 
     //注册望远镜渲染
     @SubscribeEvent

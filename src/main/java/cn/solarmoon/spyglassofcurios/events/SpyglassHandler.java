@@ -2,10 +2,12 @@ package cn.solarmoon.spyglassofcurios.events;
 
 import cn.solarmoon.spyglassofcurios.client.SpyglassOfCuriosClient;
 import cn.solarmoon.spyglassofcurios.network.PacketRegister;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -15,11 +17,11 @@ import net.minecraft.world.item.Items;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
-import net.minecraftforge.event.entity.living.LivingSwapItemsEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import static cn.solarmoon.spyglassofcurios.client.SpyglassOfCuriosClient.*;
 
 import java.util.Objects;
 
@@ -29,7 +31,17 @@ import static cn.solarmoon.spyglassofcurios.client.SpyglassOfCuriosClient.render
 @Mod.EventBusSubscriber
 public class SpyglassHandler {
 
-    public boolean pressCheck = false;
+    //哼，想逃？
+    @SubscribeEvent
+    public void swapCheck(TickEvent.PlayerTickEvent event) {
+        if (doubleSwap) {
+            if (pressCheck && event.player.getMainHandItem() == spyglass) {
+                event.player.swapHandItems();
+            } else if (!pressCheck) {
+                doubleSwap = false;
+            }
+        }
+    }
 
     //按键绑定
     @SubscribeEvent
@@ -38,8 +50,14 @@ public class SpyglassHandler {
         Player player = client.player;
 
         if (player == null) return;
-        if (SpyglassOfCuriosClient.useSpyglass.isDown() && !player.isUsingItem() && !player.isScoping()) {
+
+        if (useSpyglass.isDown() && !player.isUsingItem() && !player.isScoping()) {
+            if (player.getMainHandItem().is(Items.SPYGLASS)) {
+                client.gameMode.useItem(player, InteractionHand.MAIN_HAND);
+                return;
+            }
             //发包
+
             PacketRegister.sendPacket(player, "spyglassUse");
             //使用望远镜
             if (player.getOffhandItem().is(Items.SPYGLASS)) {
@@ -58,9 +76,9 @@ public class SpyglassHandler {
 
     //防副手逻辑混乱
     @SubscribeEvent
-    public void exchangeCheck(LivingSwapItemsEvent.Hands event) {
+    public void exchangeCheck(InputEvent.Key event) {
         Player player = Minecraft.getInstance().player;
-        if (pressCheck && player != null) {
+        if (pressCheck && Minecraft.getInstance().options.keySwapOffhand.isDown()) {
             PacketRegister.sendPacket(player, "spyglassExchange");
         }
     }

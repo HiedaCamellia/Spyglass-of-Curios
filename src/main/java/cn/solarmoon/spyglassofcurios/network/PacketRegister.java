@@ -31,7 +31,7 @@ public class PacketRegister {
         network.messageBuilder(SpyglassUsePacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
                 .decoder(SpyglassUsePacket::decode)
                 .encoder(SpyglassUsePacket::encode)
-                .consumerMainThread((packet, contextSupplier) -> packet.handle(packet, contextSupplier))
+                .consumerMainThread(SpyglassUsePacket::handle)
                 .add();
     }
 

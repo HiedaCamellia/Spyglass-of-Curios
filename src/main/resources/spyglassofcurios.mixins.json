@@ -7,8 +7,8 @@
   "mixins": [
   ],
   "client": [
-    "KeyDownMixin",
-    "FovMixin"
+    "FovMixin",
+    "KeyDownMixin"
   ],
   "injectors": {
     "defaultRequire": 1
