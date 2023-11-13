@@ -1,6 +1,7 @@
 package cn.solarmoon.spyglassofcurios.network.handler;
 
 import cn.solarmoon.spyglassofcurios.client.SpyglassOfCuriosClient;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -41,14 +42,15 @@ public class SpyglassUsePacket {
             switch (packet.spyglassHandle) {
                 case "spyglassUse" ->
                         CuriosApi.getCuriosHelper().findCurio(player, "spyglass", 0).ifPresent(handler -> {
+                            if (handler.stack().isEmpty()) return;
+                            if (player.getMainHandItem().is(Items.SPYGLASS)) return;
+                            if (Minecraft.getInstance().options.keySwapOffhand.isDown()) return;
                             spyglass = handler.stack().copy();
                             handler.stack().shrink(1);
-                            mainhandItem = player.getMainHandItem().copy();
+                            mainhandItem = player.getMainHandItem();
                             offhandItem = player.getOffhandItem().copy();
                             player.setItemInHand(InteractionHand.OFF_HAND, ItemStack.EMPTY);
                             player.setItemInHand(InteractionHand.OFF_HAND, spyglass);
-                            //按键检查
-                            pressCheck = true;
                         });
                 case "spyglassStop" -> {
                         if (!spyglass.isEmpty()) {
@@ -65,13 +67,19 @@ public class SpyglassUsePacket {
                     pressCheck = false;
                 }
                 case "spyglassExchange" -> {
-                    if (!spyglass.isEmpty()) {
-                        CuriosApi.getCuriosHelper().setEquippedCurio(player, "spyglass", 0, spyglass);
-                        player.setItemInHand(InteractionHand.OFF_HAND, mainhandItem);
-                        player.setItemInHand(InteractionHand.MAIN_HAND, offhandItem);
-                        pressCheck = false;
-                        spyglass = ItemStack.EMPTY;
-                        offhandItem = ItemStack.EMPTY;
+                    if (!spyglass.isEmpty() && player.getOffhandItem() == spyglass) {
+                        if (!offhandItem.isEmpty() && !mainhandItem.isEmpty()) {
+                            CuriosApi.getCuriosHelper().setEquippedCurio(player,"spyglass", 0, spyglass);
+                            player.setItemInHand(InteractionHand.OFF_HAND, offhandItem);
+                            doubleSwap = true;
+                        } else if (offhandItem.isEmpty() && !mainhandItem.isEmpty()) {
+                            spyglass = ItemStack.EMPTY;
+                        } else if (!offhandItem.isEmpty() && mainhandItem.isEmpty()) {
+                            player.setItemInHand(InteractionHand.OFF_HAND, offhandItem);
+                            CuriosApi.getCuriosHelper().setEquippedCurio(player,"spyglass", 0, spyglass);
+                        } else if (offhandItem.isEmpty() && mainhandItem.isEmpty()) {
+                            spyglass = ItemStack.EMPTY;
+                        }
                     }
                 }
                 case "spyglassPutNBT" -> {

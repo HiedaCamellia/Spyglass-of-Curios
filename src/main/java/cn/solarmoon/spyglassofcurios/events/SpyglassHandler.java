@@ -22,12 +22,23 @@ import net.minecraftforge.fml.common.Mod;
 
 import java.util.Objects;
 
-import static cn.solarmoon.spyglassofcurios.client.SpyglassOfCuriosClient.pressCheck;
-import static cn.solarmoon.spyglassofcurios.client.SpyglassOfCuriosClient.renderType;
+import static cn.solarmoon.spyglassofcurios.client.SpyglassOfCuriosClient.*;
 
 
 @Mod.EventBusSubscriber
 public class SpyglassHandler {
+
+    //哼，想逃？
+    @SubscribeEvent
+    public void swapCheck(TickEvent.PlayerTickEvent event) {
+        if (doubleSwap) {
+            if (pressCheck && event.player.getMainHandItem() == spyglass) {
+                event.player.swapHandItems();
+            } else if (!pressCheck) {
+                doubleSwap = false;
+            }
+        }
+    }
 
     //按键绑定
     @SubscribeEvent
@@ -44,11 +55,22 @@ public class SpyglassHandler {
                 client.gameMode.useItem(player, InteractionHand.OFF_HAND);
             }
 
+            pressCheck = true;
+
         }
         if (!SpyglassOfCuriosClient.useSpyglass.isDown() && pressCheck) {
             //发包
             PacketRegister.sendPacket(player,"spyglassStop");
 
+        }
+    }
+
+    //防副手逻辑混乱
+    @SubscribeEvent
+    public void exchangeCheck(InputEvent.Key event) {
+        Player player = Minecraft.getInstance().player;
+        if (pressCheck && Minecraft.getInstance().options.keySwapOffhand.isDown()) {
+            PacketRegister.sendPacket(player, "spyglassExchange");
         }
     }
 
