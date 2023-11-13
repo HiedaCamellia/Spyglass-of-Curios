@@ -47,7 +47,14 @@ public class SpyglassHandler {
         Player player = client.player;
 
         if (player == null) return;
+
         if (SpyglassOfCuriosClient.useSpyglass.isDown() && !player.isUsingItem() && !player.isScoping()) {
+
+            if (player.getMainHandItem().is(Items.SPYGLASS)) {
+                client.gameMode.useItem(player, InteractionHand.MAIN_HAND);
+                return;
+            }
+
             //发包
             PacketRegister.sendPacket(player, "spyglassUse");
             //使用望远镜
