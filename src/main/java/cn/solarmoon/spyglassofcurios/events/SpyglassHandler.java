@@ -52,12 +52,13 @@ public class SpyglassHandler {
         if (player == null) return;
 
         if (useSpyglass.isDown() && !player.isUsingItem() && !player.isScoping()) {
+
             if (player.getMainHandItem().is(Items.SPYGLASS)) {
                 client.gameMode.useItem(player, InteractionHand.MAIN_HAND);
                 return;
             }
-            //发包
 
+            //发包
             PacketRegister.sendPacket(player, "spyglassUse");
             //使用望远镜
             if (player.getOffhandItem().is(Items.SPYGLASS)) {
