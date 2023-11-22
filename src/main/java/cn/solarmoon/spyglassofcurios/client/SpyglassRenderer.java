@@ -1,5 +1,6 @@
 package cn.solarmoon.spyglassofcurios.client;
 
+import cn.solarmoon.spyglassofcurios.Config.RegisterConfig;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
@@ -37,6 +38,7 @@ public class SpyglassRenderer implements ICurioRenderer {
             float HeadYaw,
             float headPitch
     ) {
+        if(RegisterConfig.disableRenderAll.get()) return;
         matrixStack.pushPose();
         ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
         LivingEntity living = slotContext.entity();
@@ -50,31 +52,41 @@ public class SpyglassRenderer implements ICurioRenderer {
             nbt = "back_waist";
         }
         if ("back_waist".equals(nbt)) {
-            if(living.isCrouching()) {
-                matrixStack.translate(0.0F, 0.14F, 0.3F);
+            if (!RegisterConfig.disableRenderBackWaist.get()) {
+                if(living.isCrouching()) {
+                    matrixStack.translate(0.0F, 0.14F, 0.3F);
+                }
+                matrixStack.translate(.15, 0.6, 0.2);
+                matrixStack.mulPose(Direction.DOWN.getRotation());
+                matrixStack.scale(0.7f, 0.7f, 0.7f);
+            } else {
+                matrixStack.scale(0.0f, 0.0f, 0.0f);
             }
-            matrixStack.translate(.15, 0.6, 0.2);
-            matrixStack.mulPose(Direction.DOWN.getRotation());
-            matrixStack.scale(0.7f, 0.7f, 0.7f);
-        }
-        if ("head".equals(nbt)) {
-            if(living.isCrouching()) {
-                matrixStack.translate(0.0F, 0.26F, 0F);
+        } else if ("head".equals(nbt)) {
+            if (!RegisterConfig.disableRenderHead.get()) {
+                if(living.isCrouching()) {
+                    matrixStack.translate(0.0F, 0.26F, 0F);
+                }
+                matrixStack.mulPose(Vector3f.YP.rotationDegrees(HeadYaw));
+                matrixStack.mulPose(Vector3f.XP.rotationDegrees(headPitch));
+                matrixStack.mulPose(Vector3f.ZP.rotationDegrees(180.0F));
+                matrixStack.translate(-0.1, 0.21, -0.6);
+                matrixStack.mulPose(Direction.SOUTH.getRotation());
+                matrixStack.scale(1f, 1f, 1f);
+            } else {
+                matrixStack.scale(0.0f, 0.0f, 0.0f);
             }
-            matrixStack.mulPose(Vector3f.YP.rotationDegrees(HeadYaw));
-            matrixStack.mulPose(Vector3f.XP.rotationDegrees(headPitch));
-            matrixStack.mulPose(Vector3f.ZP.rotationDegrees(180.0F));
-            matrixStack.translate(-0.1, 0.21, -0.6);
-            matrixStack.mulPose(Direction.SOUTH.getRotation());
-            matrixStack.scale(1f, 1f, 1f);
-        }
-        if ("indescribable".equals(nbt)) {
-            if(living.isCrouching()) {
-                matrixStack.translate(0.0F, 0.14F, 0.3F);
+        } else if ("indescribable".equals(nbt)) {
+            if (!RegisterConfig.disableRenderIndescribable.get()) {
+                if(living.isCrouching()) {
+                    matrixStack.translate(0.0F, 0.14F, 0.3F);
+                }
+                matrixStack.translate(0, -1, 0);
+                matrixStack.mulPose(Direction.DOWN.getRotation());
+                matrixStack.scale(7f, 7f, 7f);
+            } else {
+                matrixStack.scale(0.0f, 0.0f, 0.0f);
             }
-            matrixStack.translate(0, -1, 0);
-            matrixStack.mulPose(Direction.DOWN.getRotation());
-            matrixStack.scale(7f, 7f, 7f);
         }
 
         BakedModel spyglass = itemRenderer.getModel(Items.SPYGLASS.getDefaultInstance(), null, null, 1);

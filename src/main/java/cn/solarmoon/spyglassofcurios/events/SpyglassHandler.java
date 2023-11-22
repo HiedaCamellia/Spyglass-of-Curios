@@ -1,5 +1,6 @@
 package cn.solarmoon.spyglassofcurios.events;
 
+import cn.solarmoon.spyglassofcurios.Config.RegisterConfig;
 import cn.solarmoon.spyglassofcurios.client.SpyglassOfCuriosClient;
 import cn.solarmoon.spyglassofcurios.network.PacketRegister;
 import net.minecraft.client.Minecraft;
@@ -20,6 +21,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 import static cn.solarmoon.spyglassofcurios.client.SpyglassOfCuriosClient.*;
@@ -147,20 +149,18 @@ public class SpyglassHandler {
     @SubscribeEvent
     public void setRenderType(PlayerInteractEvent.LeftClickEmpty event) {
         Player player = Minecraft.getInstance().player;
+        if(RegisterConfig.disableRenderAll.get()) return;
         if (player != null && event.getItemStack().is(Items.SPYGLASS) && player.isCrouching()) {
-            if ("back_waist".equals(renderType)) {
-                renderType = "head";
-                PacketRegister.sendPacket(player, "spyglassPutNBTRender");
-                player.displayClientMessage(Component.translatable("switch.spyglassofcurios.head"), true);
-            } else if ("head".equals(renderType)) {
-                renderType = "indescribable";
-                PacketRegister.sendPacket(player, "spyglassPutNBTRender");
-                player.displayClientMessage(Component.translatable("switch.spyglassofcurios.indescribable"), true);
-            } else {
-                renderType = "back_waist";
-                PacketRegister.sendPacket(player, "spyglassPutNBTRender");
-                player.displayClientMessage(Component.translatable("switch.spyglassofcurios.back_waist"), true);
-            }
+            String[] renderTypes = {"back_waist", "head", "indescribable"};
+            Boolean[] disableRenders = {RegisterConfig.disableRenderBackWaist.get(), RegisterConfig.disableRenderHead.get(), RegisterConfig.disableRenderIndescribable.get()};
+            if (Arrays.stream(disableRenders).allMatch(Boolean::booleanValue)) return;
+            int index = Arrays.asList(renderTypes).indexOf(renderType);
+            do {
+                index = (index + 1) % renderTypes.length;
+            } while (disableRenders[index]);
+            renderType = renderTypes[index];
+            PacketRegister.sendPacket(player, "spyglassPutNBTRender");
+            player.displayClientMessage(Component.translatable("switch.spyglassofcurios." + renderType), true);
         }
     }
 

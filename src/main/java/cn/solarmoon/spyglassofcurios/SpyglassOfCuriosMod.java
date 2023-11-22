@@ -1,5 +1,6 @@
 package cn.solarmoon.spyglassofcurios;
 
+import cn.solarmoon.spyglassofcurios.Config.RegisterConfig;
 import cn.solarmoon.spyglassofcurios.events.SpyglassHandler;
 import cn.solarmoon.spyglassofcurios.network.PacketRegister;
 import net.minecraft.resources.ResourceLocation;
@@ -11,11 +12,16 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotTypeMessage;
 
+import static net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus.MOD;
+
+@Mod.EventBusSubscriber(bus = MOD)
 @Mod("spyglassofcurios")
 public class SpyglassOfCuriosMod {
     public static final String MOD_ID = "spyglassofcurios";
 
     public SpyglassOfCuriosMod() {
+        RegisterConfig.register();
+
         //数据包
         PacketRegister packetRegister = new PacketRegister();
         packetRegister.register();
@@ -24,7 +30,6 @@ public class SpyglassOfCuriosMod {
         MinecraftForge.EVENT_BUS.register(new SpyglassHandler());
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
-
 
     }
 
