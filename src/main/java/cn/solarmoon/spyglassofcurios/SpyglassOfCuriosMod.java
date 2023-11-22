@@ -1,5 +1,6 @@
 package cn.solarmoon.spyglassofcurios;
 
+import cn.solarmoon.spyglassofcurios.Config.RegisterConfig;
 import cn.solarmoon.spyglassofcurios.events.SpyglassHandler;
 import cn.solarmoon.spyglassofcurios.network.PacketRegister;
 import net.minecraftforge.common.MinecraftForge;
@@ -16,6 +17,8 @@ public class SpyglassOfCuriosMod {
 
         //非静态事件处理器
         MinecraftForge.EVENT_BUS.register(new SpyglassHandler());
+
+        RegisterConfig.register();
 
     }
 }

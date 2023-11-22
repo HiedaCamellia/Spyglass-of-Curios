@@ -51,5 +51,4 @@ public class SpyglassOfCuriosClient {
     public static void onClientSetupEvent(FMLClientSetupEvent e) {
         CuriosRendererRegistry.register(ForgeRegistries.ITEMS.getValue(new ResourceLocation("minecraft:spyglass")), SpyglassRenderer::new);
     }
-
 }

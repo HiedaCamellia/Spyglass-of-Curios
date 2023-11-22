@@ -1,10 +1,13 @@
 package cn.solarmoon.spyglassofcurios.events;
 
+import cn.solarmoon.spyglassofcurios.Config.RegisterConfig;
 import cn.solarmoon.spyglassofcurios.client.SpyglassOfCuriosClient;
 import cn.solarmoon.spyglassofcurios.network.PacketRegister;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
@@ -14,6 +17,8 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
@@ -21,8 +26,11 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+
 import static cn.solarmoon.spyglassofcurios.client.SpyglassOfCuriosClient.*;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 import static cn.solarmoon.spyglassofcurios.client.SpyglassOfCuriosClient.renderType;
@@ -150,22 +158,21 @@ public class SpyglassHandler {
     @SubscribeEvent
     public void setRenderType(PlayerInteractEvent.LeftClickEmpty event) {
         Player player = Minecraft.getInstance().player;
+        if(RegisterConfig.disableRenderAll.get()) return;
         if (player != null && event.getItemStack().is(Items.SPYGLASS) && player.isCrouching()) {
-            if ("back_waist".equals(renderType)) {
-                renderType = "head";
-                PacketRegister.sendPacket(player, "spyglassPutNBTRender");
-                player.displayClientMessage(Component.translatable("switch.spyglassofcurios.head"), true);
-            } else if ("head".equals(renderType)) {
-                renderType = "indescribable";
-                PacketRegister.sendPacket(player, "spyglassPutNBTRender");
-                player.displayClientMessage(Component.translatable("switch.spyglassofcurios.indescribable"), true);
-            } else {
-                renderType = "back_waist";
-                PacketRegister.sendPacket(player, "spyglassPutNBTRender");
-                player.displayClientMessage(Component.translatable("switch.spyglassofcurios.back_waist"), true);
-            }
+            String[] renderTypes = {"back_waist", "head", "indescribable"};
+            Boolean[] disableRenders = {RegisterConfig.disableRenderBackWaist.get(), RegisterConfig.disableRenderHead.get(), RegisterConfig.disableRenderIndescribable.get()};
+            if (Arrays.stream(disableRenders).allMatch(Boolean::booleanValue)) return;
+            int index = Arrays.asList(renderTypes).indexOf(renderType);
+            do {
+                index = (index + 1) % renderTypes.length;
+            } while (disableRenders[index]);
+            renderType = renderTypes[index];
+            PacketRegister.sendPacket(player, "spyglassPutNBTRender");
+            player.displayClientMessage(Component.translatable("switch.spyglassofcurios." + renderType), true);
         }
     }
+
 
 }
 
