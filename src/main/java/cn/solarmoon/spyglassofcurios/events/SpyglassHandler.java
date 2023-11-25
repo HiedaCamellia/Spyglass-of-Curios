@@ -3,22 +3,17 @@ package cn.solarmoon.spyglassofcurios.events;
 import cn.solarmoon.spyglassofcurios.Config.RegisterConfig;
 import cn.solarmoon.spyglassofcurios.client.SpyglassOfCuriosClient;
 import cn.solarmoon.spyglassofcurios.network.PacketRegister;
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
@@ -26,17 +21,15 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-
-import static cn.solarmoon.spyglassofcurios.client.SpyglassOfCuriosClient.*;
 
 import java.util.Arrays;
 import java.util.Objects;
 
-import static cn.solarmoon.spyglassofcurios.client.SpyglassOfCuriosClient.renderType;
+import static cn.solarmoon.spyglassofcurios.SpyglassOfCuriosMod.MOD_ID;
+import static cn.solarmoon.spyglassofcurios.client.SpyglassOfCuriosClient.*;
 
 
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(modid = MOD_ID, value = Dist.CLIENT ,bus = Mod.EventBusSubscriber.Bus.MOD)
 public class SpyglassHandler {
 
     //哼，想逃？

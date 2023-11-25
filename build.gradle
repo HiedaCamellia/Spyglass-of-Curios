@@ -21,7 +21,7 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.spongepowered.mixin'
 
-version = 1.4
+version = "1.4.1"
 group = 'cn.solarmoon.spyglassofcurios'
 
 

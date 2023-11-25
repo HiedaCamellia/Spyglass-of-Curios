@@ -3,7 +3,9 @@ package cn.solarmoon.spyglassofcurios;
 import cn.solarmoon.spyglassofcurios.Config.RegisterConfig;
 import cn.solarmoon.spyglassofcurios.events.SpyglassHandler;
 import cn.solarmoon.spyglassofcurios.network.PacketRegister;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod("spyglassofcurios")
@@ -16,7 +18,7 @@ public class SpyglassOfCuriosMod {
         packetRegister.register();
 
         //非静态事件处理器
-        MinecraftForge.EVENT_BUS.register(new SpyglassHandler());
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT,() ->()->MinecraftForge.EVENT_BUS.register(new SpyglassHandler()));
 
         RegisterConfig.register();
 
