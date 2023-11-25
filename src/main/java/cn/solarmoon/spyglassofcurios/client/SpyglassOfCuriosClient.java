@@ -16,7 +16,7 @@ import org.lwjgl.glfw.GLFW;
 import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
 
 
-@Mod.EventBusSubscriber(modid = "spyglassofcurios", value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = "spyglassofcurios", value = Dist.CLIENT ,bus = Mod.EventBusSubscriber.Bus.MOD)
 public class SpyglassOfCuriosClient {
     //按键注册
     public static KeyMapping useSpyglass = new KeyMapping(

@@ -4,7 +4,6 @@ import cn.solarmoon.spyglassofcurios.Config.RegisterConfig;
 import cn.solarmoon.spyglassofcurios.client.SpyglassOfCuriosClient;
 import cn.solarmoon.spyglassofcurios.network.PacketRegister;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
@@ -13,13 +12,14 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -27,7 +27,7 @@ import java.util.Objects;
 import static cn.solarmoon.spyglassofcurios.client.SpyglassOfCuriosClient.*;
 
 
-@Mod.EventBusSubscriber
+@OnlyIn(Dist.CLIENT)
 public class SpyglassHandler {
 
     //哼，想逃？
@@ -113,7 +113,7 @@ public class SpyglassHandler {
     @SubscribeEvent
     public void onUse(LivingEntityUseItemEvent.Start event) {
         Minecraft client = Minecraft.getInstance();
-        LocalPlayer player = client.player;
+        Player player = (Player) event.getEntity();
         ItemStack spyglass = event.getItem();
         if (spyglass.is(Items.SPYGLASS) && spyglass.hasTag()) {
             if (spyglass.getTag().contains("MULTIPLIER")) {
@@ -130,7 +130,7 @@ public class SpyglassHandler {
     @SubscribeEvent
     public void onMouseScroll(InputEvent.MouseScrollingEvent event){
         Minecraft client = Minecraft.getInstance();
-        LocalPlayer player = client.player;
+        Player player = client.player;
         if(player != null && player.isScoping() && client.options.getCameraType().isFirstPerson()){
             if (player.getUseItem().hasTag()){
                 //调整倍率
@@ -148,7 +148,7 @@ public class SpyglassHandler {
     //切换渲染模式
     @SubscribeEvent
     public void setRenderType(PlayerInteractEvent.LeftClickEmpty event) {
-        Player player = Minecraft.getInstance().player;
+        Player player = event.getEntity();
         if(RegisterConfig.disableRenderAll.get()) return;
         if (player != null && event.getItemStack().is(Items.SPYGLASS) && player.isCrouching()) {
             String[] renderTypes = {"back_waist", "head", "indescribable"};
