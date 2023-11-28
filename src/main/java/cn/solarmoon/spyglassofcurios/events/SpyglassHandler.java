@@ -13,31 +13,29 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import top.theillusivec4.curios.api.CuriosApi;
 
 import java.util.Arrays;
 import java.util.Objects;
 
-import static cn.solarmoon.spyglassofcurios.SpyglassOfCuriosMod.MOD_ID;
+import static cn.solarmoon.spyglassofcurios.SpyglassOfCuriosMod.useSpyglass;
 import static cn.solarmoon.spyglassofcurios.client.SpyglassOfCuriosClient.*;
 
 
-@Mod.EventBusSubscriber(modid = MOD_ID, value = Dist.CLIENT ,bus = Mod.EventBusSubscriber.Bus.MOD)
 public class SpyglassHandler {
 
     //哼，想逃？
     @SubscribeEvent
     public void swapCheck(TickEvent.PlayerTickEvent event) {
         if (doubleSwap) {
-            if (pressCheck && event.player.getMainHandItem() == spyglass) {
-                event.player.swapHandItems();
+            if (pressCheck && event.player.getMainHandItem().is(Items.SPYGLASS)) {
+                PacketRegister.sendPacket(spyglass, offhandItem, mainhandItem, doubleSwap, MULTIPLIER, renderType, "Hand3");//清除副手
             } else if (!pressCheck) {
                 doubleSwap = false;
             }
@@ -60,17 +58,37 @@ public class SpyglassHandler {
             }
 
             //发包
-            PacketRegister.sendPacket(player, "spyglassUse");
+            CuriosApi.getCuriosInventory(player).ifPresent(handler -> handler.findCurio("spyglass", 0).ifPresent(e -> {
+                if (e.stack().isEmpty()) return;
+                if (player.getMainHandItem().is(Items.SPYGLASS)) return;
+                if (Minecraft.getInstance().options.keySwapOffhand.isDown()) return;
+                spyglass = e.stack().copy();
+                PacketRegister.sendPacket(spyglass, offhandItem, mainhandItem, doubleSwap, MULTIPLIER, renderType, "clear1");//清除饰品
+                mainhandItem = player.getMainHandItem();
+                offhandItem = player.getOffhandItem();
+                PacketRegister.sendPacket(spyglass, offhandItem, mainhandItem, doubleSwap, MULTIPLIER, renderType, "clear2");//清除副手
+                PacketRegister.sendPacket(spyglass, offhandItem, mainhandItem, doubleSwap, MULTIPLIER, renderType, "setHand1");//副手上望远镜
+            }));
             //使用望远镜
-            if (player.getOffhandItem().is(Items.SPYGLASS)) {
-                client.gameMode.useItem(player, InteractionHand.OFF_HAND);
-            }
+            client.gameMode.useItem(player, InteractionHand.OFF_HAND);
             //按键检查
             pressCheck = true;
         }
-        if (!SpyglassOfCuriosClient.useSpyglass.isDown() && pressCheck) {
+        if (!useSpyglass.isDown() && pressCheck) {
             //发包
-            PacketRegister.sendPacket(player,"spyglassStop");
+            CuriosApi.getCuriosInventory(player).ifPresent(handler -> {
+                if (!spyglass.isEmpty() && player.getOffhandItem().is(Items.SPYGLASS)) {
+                    spyglass = player.getOffhandItem().copy();
+                    PacketRegister.sendPacket(spyglass, offhandItem, mainhandItem, doubleSwap, MULTIPLIER, renderType, "setCurio1");
+                    PacketRegister.sendPacket(spyglass, offhandItem, mainhandItem, doubleSwap, MULTIPLIER, renderType, "setHand2");
+                } else if (spyglass.isEmpty() && player.getOffhandItem().is(Items.SPYGLASS)) {
+                    spyglass = player.getOffhandItem().copy();
+                    PacketRegister.sendPacket(spyglass, offhandItem, mainhandItem, doubleSwap, MULTIPLIER, renderType, "clear2");
+                    PacketRegister.sendPacket(spyglass, offhandItem, mainhandItem, doubleSwap, MULTIPLIER, renderType, "setCurio1");
+                }
+            });
+            spyglass = ItemStack.EMPTY;
+            offhandItem = ItemStack.EMPTY;
             //重置按键检查
             pressCheck = false;
         }
@@ -81,7 +99,23 @@ public class SpyglassHandler {
     public void exchangeCheck(InputEvent.Key event) {
         Player player = Minecraft.getInstance().player;
         if (pressCheck && Minecraft.getInstance().options.keySwapOffhand.isDown()) {
-            PacketRegister.sendPacket(player, "spyglassExchange");
+            CuriosApi.getCuriosInventory(player).ifPresent(handler -> {
+                if (player != null && !spyglass.isEmpty() && player.getOffhandItem().is(Items.SPYGLASS)) {
+                    if (!offhandItem.isEmpty() && !mainhandItem.isEmpty()) {
+                        PacketRegister.sendPacket(spyglass, offhandItem, mainhandItem, doubleSwap, MULTIPLIER, renderType, "setCurio1");
+                        PacketRegister.sendPacket(spyglass, offhandItem, mainhandItem, doubleSwap, MULTIPLIER, renderType, "setHand2");//副手上副手
+                        doubleSwap = true;
+                    } else if (offhandItem.isEmpty() && !mainhandItem.isEmpty()) {
+                        spyglass = ItemStack.EMPTY;
+                    } else if (!offhandItem.isEmpty() && mainhandItem.isEmpty()) {
+                        PacketRegister.sendPacket(spyglass, offhandItem, mainhandItem, doubleSwap, MULTIPLIER, renderType, "setHand2");
+                        PacketRegister.sendPacket(spyglass, offhandItem, mainhandItem, doubleSwap, MULTIPLIER, renderType, "setCurio1");
+                        spyglass = ItemStack.EMPTY;
+                    } else if (offhandItem.isEmpty() && mainhandItem.isEmpty()) {
+                        spyglass = ItemStack.EMPTY;
+                    }
+                }
+            });
         }
     }
 
@@ -126,7 +160,7 @@ public class SpyglassHandler {
         } else if (spyglass.is(Items.SPYGLASS)) {
             SpyglassOfCuriosClient.MULTIPLIER = 0.1;
         }
-            PacketRegister.sendPacket(player, "spyglassPutNBT");
+        PacketRegister.sendPacket(spyglass, offhandItem, mainhandItem, doubleSwap, MULTIPLIER, renderType, "spyglassPutNBT");
     }
     //滚轮调倍率并赋予NBT
     @SubscribeEvent
@@ -140,7 +174,7 @@ public class SpyglassHandler {
                 player.playSound(SoundEvents.SPYGLASS_STOP_USING, 1.0f, (float)(1.0f+(1*(1- SpyglassOfCuriosClient.MULTIPLIER)*(1- SpyglassOfCuriosClient.MULTIPLIER))));
             }
             //发包(把倍率存入独立的望远镜NBT)
-            PacketRegister.sendPacket(player, "spyglassPutNBT");
+            PacketRegister.sendPacket(spyglass, offhandItem, mainhandItem, doubleSwap, MULTIPLIER, renderType, "spyglassPutNBT");
 
             //防止滚轮触发别的操作
             event.setCanceled(true);
@@ -161,14 +195,10 @@ public class SpyglassHandler {
                 index = (index + 1) % renderTypes.length;
             } while (disableRenders[index]);
             renderType = renderTypes[index];
-            PacketRegister.sendPacket(player, "spyglassPutNBTRender");
+            PacketRegister.sendPacket(spyglass, offhandItem, mainhandItem, doubleSwap, MULTIPLIER, renderType, "spyglassPutNBTRender");
             player.displayClientMessage(Component.translatable("switch.spyglassofcurios." + renderType), true);
         }
     }
 
 
 }
-
-
-
-

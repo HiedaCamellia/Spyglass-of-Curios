@@ -3,7 +3,7 @@ package cn.solarmoon.spyglassofcurios.network;
 import cn.solarmoon.spyglassofcurios.SpyglassOfCuriosMod;
 import cn.solarmoon.spyglassofcurios.network.handler.SpyglassUsePacket;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
@@ -35,10 +35,8 @@ public class PacketRegister {
                 .add();
     }
 
-    public static void sendPacket(LivingEntity entity, String spyglassHandle) {
-        instance.sendToServer(new SpyglassUsePacket(spyglassHandle));
+    public static void sendPacket(ItemStack spyglass, ItemStack offhandItem, ItemStack mainhandItem, boolean doubleSwap, double multiplier, String renderType, String handle) {
+        instance.sendToServer(new SpyglassUsePacket(spyglass, offhandItem, mainhandItem, doubleSwap, multiplier, renderType, handle));
     }
 
 }
-
-
