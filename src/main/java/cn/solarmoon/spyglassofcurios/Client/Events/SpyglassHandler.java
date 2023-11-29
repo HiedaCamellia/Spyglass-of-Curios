@@ -1,8 +1,11 @@
-package cn.solarmoon.spyglassofcurios.events;
+package cn.solarmoon.spyglassofcurios.Client.Events;
 
+import cn.solarmoon.spyglassofcurios.Client.Constants;
+import cn.solarmoon.spyglassofcurios.Client.Method.FindSpyglassInCurio;
+import cn.solarmoon.spyglassofcurios.Client.Method.FindSpyglassInHand;
+import cn.solarmoon.spyglassofcurios.Client.Method.FovEvent;
 import cn.solarmoon.spyglassofcurios.Config.RegisterConfig;
-import cn.solarmoon.spyglassofcurios.client.SpyglassOfCuriosClient;
-import cn.solarmoon.spyglassofcurios.network.PacketRegister;
+import cn.solarmoon.spyglassofcurios.Server.network.PacketRegister;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.nbt.CompoundTag;
@@ -18,14 +21,12 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import top.theillusivec4.curios.api.CuriosApi;
 
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicReference;
 
-import static cn.solarmoon.spyglassofcurios.SpyglassOfCuriosMod.useSpyglass;
-import static cn.solarmoon.spyglassofcurios.client.SpyglassOfCuriosClient.*;
+import static cn.solarmoon.spyglassofcurios.Client.Constants.*;
+import static cn.solarmoon.spyglassofcurios.Client.RegisterClient.useSpyglass;
 
 
 public class SpyglassHandler {
@@ -40,43 +41,33 @@ public class SpyglassHandler {
 
         if (useSpyglass.isDown() && !player.isUsingItem() && !player.isScoping()) {
 
-            ItemStack spyglass;
-            InteractionHand hand = InteractionHand.MAIN_HAND;
-            boolean flag;
-            if (mc.player != null) {
-                flag = !mc.player.getMainHandItem().isEmpty() || !mc.player.getOffhandItem().isEmpty();
-                if(flag) {
-                    spyglass = mc.player.getOffhandItem().is(Items.SPYGLASS) ? mc.player.getOffhandItem() : mc.player.getMainHandItem();
-                    hand = mc.player.getOffhandItem().is(Items.SPYGLASS) ? InteractionHand.OFF_HAND : hand;
-                } else {
-                    spyglass = ItemStack.EMPTY;
-                }
-            } else {
-                spyglass = ItemStack.EMPTY;
-                flag = false;
-            }
+            FindSpyglassInHand finder = new FindSpyglassInHand();
+            boolean flag = finder.hasItem();
+            ItemStack spyglass = finder.getSpyglass();
+            InteractionHand hand = finder.getHand();
 
             if (flag && spyglass.is(Items.SPYGLASS)) {
                 if (client.gameMode != null) {
                     client.gameMode.useItem(player, hand);
                     if (!spyglass.hasTag()) {
-                        SpyglassOfCuriosClient.MULTIPLIER = .1;
+                        Constants.MULTIPLIER = .1;
                         PacketRegister.sendPacket(MULTIPLIER, renderType, "spyglassPutNBT");
-                    } else SpyglassOfCuriosClient.MULTIPLIER = (10 - Objects.requireNonNull(spyglass.getTag()).getDouble("MULTIPLIER")) / 10;
+                    } else Constants.MULTIPLIER = (10 - Objects.requireNonNull(spyglass.getTag()).getDouble("MULTIPLIER")) / 10;
                 }
                 return;
             }
 
-            CuriosApi.getCuriosInventory(player).ifPresent(handler -> handler.findCurio("spyglass", 0).ifPresent(e -> {
-                if (flag && spyglass.is(Items.SPYGLASS)) return;
+            FindSpyglassInCurio finderCurio = new FindSpyglassInCurio();
+            ItemStack spyglassCurio = finderCurio.getSpyglass(mc.player);
+            boolean hasSpyglass = finderCurio.hasSpyglass(mc.player);
+                if (!hasSpyglass || spyglass.is(Items.SPYGLASS)) return;
                 if (mc.player != null) {
                     mc.player.playSound(SoundEvents.SPYGLASS_USE);
-                    if (!e.stack().hasTag()) {
-                        SpyglassOfCuriosClient.MULTIPLIER = .1;
+                    if (!spyglassCurio.hasTag()) {
+                        Constants.MULTIPLIER = .1;
                         PacketRegister.sendPacket(MULTIPLIER, renderType, "spyglassPutNBT");
-                    } else SpyglassOfCuriosClient.MULTIPLIER = (10 - Objects.requireNonNull(e.stack().getTag()).getDouble("MULTIPLIER")) / 10;
+                    } else Constants.MULTIPLIER = (10 - Objects.requireNonNull(spyglassCurio.getTag()).getDouble("MULTIPLIER")) / 10;
                 }
-            }));
 
             //按键检查
             pressCheck = true;
@@ -85,10 +76,10 @@ public class SpyglassHandler {
 
         if (!useSpyglass.isDown() && pressCheck) {
             //重置按键检查
-            if (mc.player != null) {
-                CuriosApi.getCuriosInventory(player).ifPresent(handler -> handler.findCurio("spyglass", 0).ifPresent(e -> {
-                    mc.player.playSound(SoundEvents.SPYGLASS_STOP_USING);
-                }));
+            FindSpyglassInCurio curioFinder = new FindSpyglassInCurio();
+            boolean hasSpyglass = curioFinder.hasSpyglass(mc.player);
+            if(hasSpyglass) if (mc.player != null) {
+                mc.player.playSound(SoundEvents.SPYGLASS_STOP_USING);
             }
             pressCheck = false;
         }
@@ -116,7 +107,7 @@ public class SpyglassHandler {
     //随时设置视距
     @SubscribeEvent
     public void onFovModifier(FovEvent event){
-        event.setNewFov((float) SpyglassOfCuriosClient.MULTIPLIER);
+        event.setNewFov((float) Constants.MULTIPLIER);
     }
     //滚轮调倍率并赋予NBT
     @SubscribeEvent
@@ -124,15 +115,19 @@ public class SpyglassHandler {
         Minecraft client = Minecraft.getInstance();
         LocalPlayer player = client.player;
         if(player != null && player.isScoping() && client.options.getCameraType().isFirstPerson()){
-            AtomicReference<CompoundTag> spyglass = new AtomicReference<>(ItemStack.EMPTY.getTag());
-            if (player.isUsingItem()) spyglass.set(player.getUseItem().getTag());
-            CuriosApi.getCuriosInventory(mc.player).ifPresent(handler -> handler.findCurio("spyglass", 0).ifPresent(e -> {
-                if (!player.isUsingItem()) spyglass.set(e.stack().getTag());
-            }));
-            //调整倍率
-            SpyglassOfCuriosClient.MULTIPLIER = Mth.clamp((10 - spyglass.get().getDouble("MULTIPLIER")) / 10 - (event.getScrollDelta() / 10), .1, 1.0);
+            FindSpyglassInCurio curioFinder = new FindSpyglassInCurio();
+            boolean hasSpyglass = curioFinder.hasSpyglass(mc.player);
 
-            player.playSound(SoundEvents.SPYGLASS_STOP_USING, 1.0f, (float) (1.0f + (1 * (1 - SpyglassOfCuriosClient.MULTIPLIER) * (1 - SpyglassOfCuriosClient.MULTIPLIER))));
+            ItemStack spyglass = ItemStack.EMPTY;
+            if (player.isUsingItem()) spyglass = player.getUseItem();
+            else if (!player.isUsingItem() && hasSpyglass) spyglass = curioFinder.getSpyglass(mc.player);
+
+            //调整倍率
+            if (spyglass.getTag() != null) {
+                Constants.MULTIPLIER = Mth.clamp((10 - spyglass.getTag().getDouble("MULTIPLIER")) / 10 - (event.getScrollDelta() / 10), .1, 1.0);
+            }
+
+            player.playSound(SoundEvents.SPYGLASS_STOP_USING, 1.0f, (float) (1.0f + (1 * (1 - Constants.MULTIPLIER) * (1 - Constants.MULTIPLIER))));
             //发包(把倍率存入独立的望远镜NBT)
             PacketRegister.sendPacket(MULTIPLIER, renderType, "spyglassPutNBT");
 

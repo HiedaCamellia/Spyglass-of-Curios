@@ -1,7 +1,6 @@
-package cn.solarmoon.spyglassofcurios.network;
+package cn.solarmoon.spyglassofcurios.Server.network;
 
 import cn.solarmoon.spyglassofcurios.SpyglassOfCuriosMod;
-import cn.solarmoon.spyglassofcurios.network.handler.SpyglassUsePacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;

@@ -1,6 +1,6 @@
 package cn.solarmoon.spyglassofcurios.mixin;
 
-import cn.solarmoon.spyglassofcurios.events.FovEvent;
+import cn.solarmoon.spyglassofcurios.Client.Method.FovEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraftforge.common.MinecraftForge;
@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(AbstractClientPlayer.class)
-public class FovMixin{
+public class Fov {
     @Inject(method = "getFieldOfViewModifier",at=@At(value = "RETURN"),cancellable = true)
     public void onScopingFov(CallbackInfoReturnable<Float> cir){
         Minecraft client = Minecraft.getInstance();

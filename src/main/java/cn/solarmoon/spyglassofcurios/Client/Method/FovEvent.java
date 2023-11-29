@@ -1,4 +1,4 @@
-package cn.solarmoon.spyglassofcurios.events;
+package cn.solarmoon.spyglassofcurios.Client.Method;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Mth;
