@@ -4,7 +4,6 @@ import cn.solarmoon.spyglassofcurios.Config.RegisterConfig;
 import cn.solarmoon.spyglassofcurios.client.SpyglassOfCuriosClient;
 import cn.solarmoon.spyglassofcurios.network.PacketRegister;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
@@ -15,7 +14,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -30,19 +28,7 @@ import static cn.solarmoon.spyglassofcurios.client.SpyglassOfCuriosClient.*;
 
 public class SpyglassHandler {
 
-    //哼，想逃？
-    @SubscribeEvent
-    public void swapCheck(TickEvent.PlayerTickEvent event) {
-        if (doubleSwap) {
-            if (pressCheck && event.player.getMainHandItem().is(Items.SPYGLASS)) {
-                PacketRegister.sendPacket(spyglass, offhandItem, mainhandItem, doubleSwap, MULTIPLIER, renderType, "Hand3");//清除副手
-            } else if (!pressCheck) {
-                doubleSwap = false;
-            }
-        }
-    }
-
-    //按键绑定
+    //按键绑定 && 设定焦距为nbt值 && 无nbt就自动赋予
     @SubscribeEvent
     public void spyglassUse(TickEvent.ClientTickEvent event) {
         Minecraft client = Minecraft.getInstance();
@@ -52,86 +38,73 @@ public class SpyglassHandler {
 
         if (useSpyglass.isDown() && !player.isUsingItem() && !player.isScoping()) {
 
-            if (player.getMainHandItem().is(Items.SPYGLASS)) {
-                client.gameMode.useItem(player, InteractionHand.MAIN_HAND);
+            ItemStack spyglass;
+            InteractionHand hand = InteractionHand.MAIN_HAND;
+            boolean flag;
+            if (mc.player != null) {
+                flag = !mc.player.getMainHandItem().isEmpty() || !mc.player.getOffhandItem().isEmpty();
+                if(flag) {
+                    spyglass = mc.player.getOffhandItem().is(Items.SPYGLASS) ? mc.player.getOffhandItem() : mc.player.getMainHandItem();
+                    hand = mc.player.getOffhandItem().is(Items.SPYGLASS) ? InteractionHand.OFF_HAND : hand;
+                } else {
+                    spyglass = ItemStack.EMPTY;
+                }
+            } else {
+                spyglass = ItemStack.EMPTY;
+                flag = false;
+            }
+
+            if (flag && spyglass.is(Items.SPYGLASS)) {
+                if (client.gameMode != null) {
+                    client.gameMode.useItem(player, hand);
+                    if (!spyglass.hasTag()) {
+                        SpyglassOfCuriosClient.MULTIPLIER = .1;
+                        PacketRegister.sendPacket(MULTIPLIER, renderType, "spyglassPutNBT");
+                    } else SpyglassOfCuriosClient.MULTIPLIER = (10 - Objects.requireNonNull(spyglass.getTag()).getDouble("MULTIPLIER")) / 10;
+                }
                 return;
             }
 
-            //发包
-            CuriosApi.getCuriosHelper().findCurio(player, "spyglass", 0).ifPresent(e -> {
-                if (e.stack().isEmpty()) return;
-                if (player.getMainHandItem().is(Items.SPYGLASS)) return;
-                if (Minecraft.getInstance().options.keySwapOffhand.isDown()) return;
-                spyglass = e.stack().copy();
-                PacketRegister.sendPacket(spyglass, offhandItem, mainhandItem, doubleSwap, MULTIPLIER, renderType, "clear1");//清除饰品
-                mainhandItem = player.getMainHandItem();
-                offhandItem = player.getOffhandItem();
-                PacketRegister.sendPacket(spyglass, offhandItem, mainhandItem, doubleSwap, MULTIPLIER, renderType, "clear2");//清除副手
-                PacketRegister.sendPacket(spyglass, offhandItem, mainhandItem, doubleSwap, MULTIPLIER, renderType, "setHand1");//副手上望远镜
-            });
-            //使用望远镜
-            client.gameMode.useItem(player, InteractionHand.OFF_HAND);
+            if (mc.player != null) {
+                CuriosApi.getCuriosHelper().findCurio(mc.player, "spyglass", 0).ifPresent(slotResult -> {
+                    if (flag && spyglass.is(Items.SPYGLASS)) return;
+                    if (mc.player != null) {
+                        mc.player.playSound(SoundEvents.SPYGLASS_USE);
+                        if (!slotResult.stack().hasTag()) {
+                            SpyglassOfCuriosClient.MULTIPLIER = .1;
+                            PacketRegister.sendPacket(MULTIPLIER, renderType, "spyglassPutNBT");
+                        } else SpyglassOfCuriosClient.MULTIPLIER = (10 - Objects.requireNonNull(slotResult.stack().getTag()).getDouble("MULTIPLIER")) / 10;
+                    }
+                });
+            }
+
             //按键检查
             pressCheck = true;
+
         }
+
         if (!useSpyglass.isDown() && pressCheck) {
-            //发包
-            if (!spyglass.isEmpty() && player.getOffhandItem().is(Items.SPYGLASS)) {
-                spyglass = player.getOffhandItem().copy();
-                PacketRegister.sendPacket(spyglass, offhandItem, mainhandItem, doubleSwap, MULTIPLIER, renderType, "setCurio1");
-                PacketRegister.sendPacket(spyglass, offhandItem, mainhandItem, doubleSwap, MULTIPLIER, renderType, "setHand2");
-            } else if (spyglass.isEmpty() && player.getOffhandItem().is(Items.SPYGLASS)) {
-                spyglass = player.getOffhandItem().copy();
-                PacketRegister.sendPacket(spyglass, offhandItem, mainhandItem, doubleSwap, MULTIPLIER, renderType, "clear2");
-                PacketRegister.sendPacket(spyglass, offhandItem, mainhandItem, doubleSwap, MULTIPLIER, renderType, "setCurio1");
-            }
-            spyglass = ItemStack.EMPTY;
-            offhandItem = ItemStack.EMPTY;
             //重置按键检查
+            if (mc.player != null) {
+                CuriosApi.getCuriosHelper().findCurio(mc.player, "spyglass", 0).ifPresent(slotResult -> mc.player.playSound(SoundEvents.SPYGLASS_STOP_USING));
+            }
             pressCheck = false;
         }
-    }
 
-    //防副手逻辑混乱
-    @SubscribeEvent
-    public void exchangeCheck(InputEvent.Key event) {
-        Player player = Minecraft.getInstance().player;
-        if (pressCheck && Minecraft.getInstance().options.keySwapOffhand.isDown()) {
-            if (player != null) {
-                if (!spyglass.isEmpty() && player.getOffhandItem().is(Items.SPYGLASS)) {
-                    if (!offhandItem.isEmpty() && !mainhandItem.isEmpty()) {
-                        PacketRegister.sendPacket(spyglass, offhandItem, mainhandItem, doubleSwap, MULTIPLIER, renderType, "setCurio1");
-                        PacketRegister.sendPacket(spyglass, offhandItem, mainhandItem, doubleSwap, MULTIPLIER, renderType, "setHand2");//副手上副手
-                        doubleSwap = true;
-                    } else if (offhandItem.isEmpty() && !mainhandItem.isEmpty()) {
-                        spyglass = ItemStack.EMPTY;
-                    } else if (!offhandItem.isEmpty() && mainhandItem.isEmpty()) {
-                        PacketRegister.sendPacket(spyglass, offhandItem, mainhandItem, doubleSwap, MULTIPLIER, renderType, "setHand2");
-                        PacketRegister.sendPacket(spyglass, offhandItem, mainhandItem, doubleSwap, MULTIPLIER, renderType, "setCurio1");
-                        spyglass = ItemStack.EMPTY;
-                    } else if (offhandItem.isEmpty() && mainhandItem.isEmpty()) {
-                        spyglass = ItemStack.EMPTY;
-                    }
-                }
-            }
-        }
     }
 
     //TOOLTIP根据望远镜NBT显示倍率
     @SubscribeEvent
     public void spyglassTooltip(ItemTooltipEvent event) {
         ItemStack spyglass = event.getItemStack();
-        if (spyglass.getItem() == Items.SPYGLASS && spyglass.hasTag()) {
+        if (spyglass.is(Items.SPYGLASS) && spyglass.hasTag()) {
             CompoundTag tag = spyglass.getTag();
-            if (tag.contains("MULTIPLIER")) {
+            if (tag != null && tag.contains("MULTIPLIER")) {
                 int multiplier = tag.getInt("MULTIPLIER");
                 Component tooltip = Component.translatable("tooltip.spyglassofcurios.multiplier", "§7§o" + multiplier);
                 event.getToolTip().add(tooltip);
-            } else {
-                Component tooltip = Component.translatable("tooltip.spyglassofcurios.default_multiplier");
-                event.getToolTip().add(tooltip);
             }
-        } else if (spyglass.getItem() == Items.SPYGLASS) {
+        } else if (spyglass.is(Items.SPYGLASS)) {
             Component tooltip = Component.translatable("tooltip.spyglassofcurios.default_multiplier");
             event.getToolTip().add(tooltip);
         }
@@ -143,36 +116,25 @@ public class SpyglassHandler {
     public void onFovModifier(FovEvent event){
         event.setNewFov((float) SpyglassOfCuriosClient.MULTIPLIER);
     }
-    //开启时给予NBT，固定焦距为NBT值
-    @SubscribeEvent
-    public void onUse(LivingEntityUseItemEvent.Start event) {
-        Minecraft client = Minecraft.getInstance();
-        LocalPlayer player = client.player;
-        ItemStack spyglass = event.getItem();
-        if (spyglass.is(Items.SPYGLASS) && spyglass.hasTag()) {
-            if (spyglass.getTag().contains("MULTIPLIER")) {
-                SpyglassOfCuriosClient.MULTIPLIER = (10-spyglass.getTag().getDouble("MULTIPLIER"))/10;
-            } else {
-                SpyglassOfCuriosClient.MULTIPLIER = 0.1;
-            }
-        } else if (spyglass.is(Items.SPYGLASS)) {
-            SpyglassOfCuriosClient.MULTIPLIER = 0.1;
-        }
-        PacketRegister.sendPacket(spyglass, offhandItem, mainhandItem, doubleSwap, MULTIPLIER, renderType, "spyglassPutNBT");
-    }
     //滚轮调倍率并赋予NBT
     @SubscribeEvent
     public void onMouseScroll(InputEvent.MouseScrollingEvent event){
         Minecraft client = Minecraft.getInstance();
-        LocalPlayer player = client.player;
+        Player player = client.player;
         if(player != null && player.isScoping() && client.options.getCameraType().isFirstPerson()){
-            if (player.getUseItem().hasTag()){
-                //调整倍率
-                SpyglassOfCuriosClient.MULTIPLIER = Mth.clamp((10 - Objects.requireNonNull(player.getUseItem().getTag()).getDouble("MULTIPLIER"))/10 - (event.getScrollDelta()/10), .1,1.0);
-                player.playSound(SoundEvents.SPYGLASS_STOP_USING, 1.0f, (float)(1.0f+(1*(1- SpyglassOfCuriosClient.MULTIPLIER)*(1- SpyglassOfCuriosClient.MULTIPLIER))));
+            ItemStack spyglass = ItemStack.EMPTY;
+            if (player.isUsingItem()) spyglass = player.getUseItem();
+            else if (mc.player != null && CuriosApi.getCuriosHelper().findCurio(mc.player, "spyglass", 0).isPresent() && !player.isUsingItem())
+                spyglass = CuriosApi.getCuriosHelper().findCurio(mc.player, "spyglass", 0).get().stack();
+
+            //调整倍率
+            if (spyglass.getTag() != null) {
+                SpyglassOfCuriosClient.MULTIPLIER = Mth.clamp((10 - spyglass.getTag().getDouble("MULTIPLIER")) / 10 - (event.getScrollDelta() / 10), .1, 1.0);
             }
+
+            player.playSound(SoundEvents.SPYGLASS_STOP_USING, 1.0f, (float) (1.0f + (1 * (1 - SpyglassOfCuriosClient.MULTIPLIER) * (1 - SpyglassOfCuriosClient.MULTIPLIER))));
             //发包(把倍率存入独立的望远镜NBT)
-            PacketRegister.sendPacket(spyglass, offhandItem, mainhandItem, doubleSwap, MULTIPLIER, renderType, "spyglassPutNBT");
+            PacketRegister.sendPacket(MULTIPLIER, renderType, "spyglassPutNBT");
 
             //防止滚轮触发别的操作
             event.setCanceled(true);
@@ -193,7 +155,7 @@ public class SpyglassHandler {
                 index = (index + 1) % renderTypes.length;
             } while (disableRenders[index]);
             renderType = renderTypes[index];
-            PacketRegister.sendPacket(spyglass, offhandItem, mainhandItem, doubleSwap, MULTIPLIER, renderType, "spyglassPutNBTRender");
+            PacketRegister.sendPacket(MULTIPLIER, renderType, "spyglassPutNBTRender");
             player.displayClientMessage(Component.translatable("switch.spyglassofcurios." + renderType), true);
         }
     }

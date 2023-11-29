@@ -8,7 +8,10 @@
   ],
   "client": [
     "FovMixin",
-    "KeyDownMixin"
+    "KeyDownMixin",
+    "RenderItem",
+    "Scoping",
+    "SpyglassAnim"
   ],
   "injectors": {
     "defaultRequire": 1
