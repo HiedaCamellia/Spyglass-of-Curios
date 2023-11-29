@@ -31,7 +31,7 @@ public abstract class SpyglassAnim extends LivingEntityRenderer<AbstractClientPl
             ItemStack spyglass;
             flag = !mc.player.getMainHandItem().isEmpty() || !mc.player.getOffhandItem().isEmpty();
             if(flag) {
-                spyglass = mc.player.getMainHandItem().isEmpty() ? mc.player.getOffhandItem() : mc.player.getMainHandItem();
+                spyglass = mc.player.getOffhandItem().is(Items.SPYGLASS) ? mc.player.getOffhandItem() : mc.player.getMainHandItem();
             } else {
                 spyglass = ItemStack.EMPTY;
             }

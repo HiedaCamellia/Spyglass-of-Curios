@@ -46,8 +46,8 @@ public class SpyglassHandler {
             if (mc.player != null) {
                 flag = !mc.player.getMainHandItem().isEmpty() || !mc.player.getOffhandItem().isEmpty();
                 if(flag) {
-                    spyglass = mc.player.getMainHandItem().isEmpty() ? mc.player.getOffhandItem() : mc.player.getMainHandItem();
-                    hand = mc.player.getMainHandItem().isEmpty() ? InteractionHand.OFF_HAND : hand;
+                    spyglass = mc.player.getOffhandItem().is(Items.SPYGLASS) ? mc.player.getOffhandItem() : mc.player.getMainHandItem();
+                    hand = mc.player.getOffhandItem().is(Items.SPYGLASS) ? InteractionHand.OFF_HAND : hand;
                 } else {
                     spyglass = ItemStack.EMPTY;
                 }
