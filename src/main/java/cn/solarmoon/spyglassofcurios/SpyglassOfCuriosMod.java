@@ -1,7 +1,6 @@
 package cn.solarmoon.spyglassofcurios;
 
 import cn.solarmoon.spyglassofcurios.Config.RegisterConfig;
-import cn.solarmoon.spyglassofcurios.client.SpyglassOfCuriosClient;
 import cn.solarmoon.spyglassofcurios.client.SpyglassRenderer;
 import cn.solarmoon.spyglassofcurios.events.SpyglassHandler;
 import cn.solarmoon.spyglassofcurios.network.PacketRegister;
@@ -59,8 +58,6 @@ public class SpyglassOfCuriosMod {
 
         event.register(useSpyglass);
     }
-
-
 
 
 }
