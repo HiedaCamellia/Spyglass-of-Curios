@@ -1,4 +1,4 @@
-package cn.solarmoon.spyglassofcurios.client;
+package cn.solarmoon.spyglassofcurios.Client.Renderer;
 
 import cn.solarmoon.spyglassofcurios.Config.RegisterConfig;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -18,9 +18,9 @@ import net.minecraft.world.item.Items;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.client.ICurioRenderer;
 
-import static cn.solarmoon.spyglassofcurios.SpyglassOfCuriosMod.useSpyglass;
-import static cn.solarmoon.spyglassofcurios.client.SpyglassOfCuriosClient.check;
-import static cn.solarmoon.spyglassofcurios.client.SpyglassOfCuriosClient.pressCheck;
+import static cn.solarmoon.spyglassofcurios.Client.Constants.check;
+import static cn.solarmoon.spyglassofcurios.Client.Constants.pressCheck;
+import static cn.solarmoon.spyglassofcurios.Client.RegisterClient.useSpyglass;
 
 
 public class SpyglassRenderer implements ICurioRenderer {

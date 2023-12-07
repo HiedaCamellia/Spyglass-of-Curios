@@ -1,9 +1,9 @@
-package cn.solarmoon.spyglassofcurios.client;
+package cn.solarmoon.spyglassofcurios.Client;
 
 import net.minecraft.client.Minecraft;
 
 
-public class SpyglassOfCuriosClient {
+public class Constants {
 
     //静态焦距
     public static double MULTIPLIER = .1f;
