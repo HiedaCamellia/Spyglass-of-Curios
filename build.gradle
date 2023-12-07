@@ -1,0 +1,124 @@
+buildscript {
+    repositories {
+        maven { url = 'https://maven.minecraftforge.net' }
+        maven { url = 'https://repo.spongepowered.org/maven' }
+        mavenCentral()
+    }
+    dependencies {
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
+    }
+}
+
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'org.spongepowered.mixin'
+
+group = 'cn.solarmoon.spyglassofcurios'
+version = "${mod_version}"
+archivesBaseName = "spyglassofcurios-forge-1.18.2"
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
+minecraft {
+
+    mappings channel: 'official', version: "${mc_version}"
+
+    runs {
+        client {
+            workingDirectory project.file('run')
+            arg "-mixin.config=spyglassofcurios.mixins.json"
+
+            // Recommended logging data for a userdev environment
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
+
+            mods {
+                curiosquarkobp {
+                    source sourceSets.main
+                }
+            }
+
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
+
+        }
+
+        server {
+            workingDirectory project.file('run')
+            arg "-mixin.config=spyglassofcurios.mixins.json"
+
+            // Recommended logging data for a userdev environment
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
+
+            mods {
+                curiosquarkobp {
+                    source sourceSets.main
+                }
+            }
+
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
+
+        }
+
+        data {
+            workingDirectory project.file('run')
+            arg "-mixin.config=spyglassofcurios.mixins.json"
+
+            // Recommended logging data for a userdev environment
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
+
+            args '--mod', 'spyglassofcurios', '--all', '--output', file('src/generated/resources/')
+
+            mods {
+                curiosquarkobp {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
+}
+
+
+repositories {
+    maven {
+        url = "https://maven.theillusivec4.top/"
+    }
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
+
+    implementation fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}")
+}
+
+
+
+jar {
+    manifest({
+        attributes([
+                "Specification-Title"     : "Spyglass of curios",
+                "Specification-Version"   : "1",
+                "Implementation-Title"    : project.name,
+                "Implementation-Version"  : "${mod_version}",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                "MixinConfigs"            : "spyglassofcurios.mixins.json"
+        ])
+    })
+
+}
+
+jar.finalizedBy('reobfJar')
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}

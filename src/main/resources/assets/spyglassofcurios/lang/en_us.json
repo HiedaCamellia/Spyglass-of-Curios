@@ -1,0 +1,13 @@
+{
+  "curios.identifier.spyglass": "Spyglass",
+
+  "category.spyglassofcurios": "Spyglass of Curios",
+  "key.spyglassofcurios.use": "Open Spyglass",
+
+  "tooltip.spyglassofcurios.multiplier": "§7§omultiplier: %s",
+  "tooltip.spyglassofcurios.default_multiplier": "§7§omultiplier: §7§o9",
+
+  "switch.spyglassofcurios.head": "§6Render Type: §fHead",
+  "switch.spyglassofcurios.back_waist": "§6Render Type: §fBack Waist",
+  "switch.spyglassofcurios.indescribable": "§6Render Type: §fIndescribable"
+}

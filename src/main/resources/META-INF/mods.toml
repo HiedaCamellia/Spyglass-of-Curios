@@ -1,0 +1,32 @@
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="MIT"
+
+[[mods]]
+modId="spyglassofcurios"
+version="1.5.1"
+displayName="Spyglass of Curios"
+logoFile="spyglassofcurioslogo.png"
+authors="曦月"
+description='''使你的望远镜与饰品栏兼容!'''
+
+[[dependencies.spyglassofcurios]]
+    modId="forge"
+    mandatory=true
+    versionRange="[40.2.0,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.spyglassofcurios]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.18.2,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.spyglassofcurios]]
+    modId = "curios"
+    mandatory = true
+    versionRange = "[1.18.2-5.0.7.0,)"
+    ordering = "NONE"
+    side = "BOTH"
