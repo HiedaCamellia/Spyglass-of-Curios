@@ -10,6 +10,7 @@ public class FindSpyglassInCurio {
     private boolean hasSpyglass;
 
     public void findSpyglassInCurio(Player player) {
+        if(CuriosApi.getCuriosHelper().findCurios(player, "spyglass").isEmpty()) return;
         hasSpyglass = CuriosApi.getCuriosHelper().findCurio(player, "spyglass", 0).isPresent();
         spyglass = CuriosApi.getCuriosHelper().findCurio(player, "spyglass", 0).get().stack();
     }
