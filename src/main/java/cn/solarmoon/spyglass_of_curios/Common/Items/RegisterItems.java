@@ -1,6 +1,9 @@
 package cn.solarmoon.spyglass_of_curios.Common.Items;
 
+import cn.solarmoon.spyglass_of_curios.Common.Items.Spyglass.Client.Events.ScrollingSet;
+import cn.solarmoon.spyglass_of_curios.Common.Items.Spyglass.Client.Events.SelectRender;
 import cn.solarmoon.spyglass_of_curios.Common.Items.Spyglass.Client.Events.SpyglassHandler;
+import cn.solarmoon.spyglass_of_curios.Common.Items.Spyglass.Client.Events.Tooltip;
 import cn.solarmoon.spyglass_of_curios.Common.Items.Spyglass.Client.Renderer.SpyglassRenderer;
 import cn.solarmoon.spyglass_of_curios.Util.Translation;
 import com.mojang.blaze3d.platform.InputConstants;
@@ -28,6 +31,9 @@ public class RegisterItems {
     public static void clientSetup(FMLClientSetupEvent event) {
         //事件
         MinecraftForge.EVENT_BUS.register(new SpyglassHandler());
+        MinecraftForge.EVENT_BUS.register(new SelectRender());
+        MinecraftForge.EVENT_BUS.register(new ScrollingSet());
+        MinecraftForge.EVENT_BUS.register(new Tooltip());
         //饰品渲染
         CuriosRendererRegistry.register(ForgeRegistries.ITEMS.getValue(new ResourceLocation("minecraft:spyglass")), SpyglassRenderer::new);
     }
