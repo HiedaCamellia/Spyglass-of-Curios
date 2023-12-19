@@ -21,15 +21,13 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.spongepowered.mixin'
 
-version = "1.5.1"
-group = 'cn.solarmoon.spyglassofcurios'
-
+version = "${mod_version}"
+group = "${mod_group_id}"
 
 base {
-    archivesName = 'spyglassofcurios-forge-1.20.1'
+    archivesName = "${mod_id}-${mod_loader}-${minecraft_version}"
 }
 
-// Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
@@ -37,11 +35,10 @@ minecraft {
 
     mappings channel: mapping_channel, version: mapping_version
 
-
     copyIdeResources = true
 
-
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+
     runs {
 
         configureEach {
@@ -59,7 +56,6 @@ minecraft {
         }
 
         client {
-
             property 'forge.enabledGameTestNamespaces', mod_id
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
@@ -85,8 +81,8 @@ minecraft {
 }
 
 mixin {
-    add sourceSets.main, "spyglassofcurios.refmap.json"
-    config "spyglassofcurios.mixins.json"
+    add sourceSets.main, "${mod_id}.refmap.json"
+    config "${mod_id}.mixins.json"
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
@@ -160,8 +156,12 @@ repositories {
 }
 
 dependencies {
+
+    //curios
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:5.3.4+1.20.1")
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:5.3.4+1.20.1:api")
+
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+
 }
 

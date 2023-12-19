@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "minVersion": "0.8.5",
+  "package": "cn.solarmoon.spyglass_of_curios.Mixin",
+  "refmap": "spyglass_of_curios.refmap.json",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+  ],
+  "client": [
+    "GameFov",
+    "KeyDown",
+    "RenderItem",
+    "Scoping",
+    "SpyglassAnim"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
