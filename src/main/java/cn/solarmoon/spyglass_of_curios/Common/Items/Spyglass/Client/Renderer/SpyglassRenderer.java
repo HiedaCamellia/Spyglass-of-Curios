@@ -18,7 +18,9 @@ import net.minecraft.world.item.Items;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.client.ICurioRenderer;
 
+import static cn.solarmoon.spyglass_of_curios.Util.Constants.mc;
 import static cn.solarmoon.spyglass_of_curios.Util.Constants.usingInCurio;
+import static cn.solarmoon.spyglass_of_curios.Util.DeBug.deBug;
 
 
 public class SpyglassRenderer implements ICurioRenderer {
@@ -40,22 +42,21 @@ public class SpyglassRenderer implements ICurioRenderer {
             float HeadYaw,
             float headPitch
     ) {
-        ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
+        ItemRenderer itemRenderer = mc.getItemRenderer();
         LivingEntity living = slotContext.entity();
+        BakedModel spyglass = itemRenderer.getModel(Items.SPYGLASS.getDefaultInstance(), mc.level, mc.player, 1);
         if(usingInCurio){
             matrixStack.pushPose();
             if (living.isCrouching()) {
                 matrixStack.translate(0.0F, 0.26F, 0F);
             }
             matrixStack.mulPose(Axis.YP.rotationDegrees(HeadYaw));
-            matrixStack.mulPose(Axis.XP.rotationDegrees(headPitch));
+            matrixStack.mulPose(Axis.XP.rotationDegrees(Math.max(headPitch, -30)));
             matrixStack.mulPose(Axis.ZP.rotationDegrees(180.0F));
             matrixStack.translate(-0.1, 0.21, -0.6);
             matrixStack.mulPose(Direction.SOUTH.getRotation());
             matrixStack.scale(1f, 1f, 1f);
-            BakedModel spyglass = itemRenderer.getModel(Items.SPYGLASS.getDefaultInstance(), null, null, 1);
-            MultiBufferSource.BufferSource buffer = Minecraft.getInstance().renderBuffers().bufferSource();
-            itemRenderer.render(stack, ItemDisplayContext.NONE, true, matrixStack, buffer, light, OverlayTexture.NO_OVERLAY, spyglass);
+            itemRenderer.render(stack, ItemDisplayContext.NONE, true, matrixStack, renderTypeBuffer, light, OverlayTexture.NO_OVERLAY, spyglass);
             matrixStack.popPose();
         }
         if(RegisterConfig.disableRenderAll.get() || usingInCurio) return;
@@ -104,9 +105,7 @@ public class SpyglassRenderer implements ICurioRenderer {
                 }
             }
         }
-        BakedModel spyglass = itemRenderer.getModel(Items.SPYGLASS.getDefaultInstance(), null, null, 1);
-        MultiBufferSource.BufferSource buffer = Minecraft.getInstance().renderBuffers().bufferSource();
-        itemRenderer.render(stack, ItemDisplayContext.NONE, true, matrixStack, buffer, light, OverlayTexture.NO_OVERLAY, spyglass);
+        itemRenderer.render(stack, ItemDisplayContext.NONE, true, matrixStack, renderTypeBuffer, light, OverlayTexture.NO_OVERLAY, spyglass);
         matrixStack.popPose();
     }
 
