@@ -10,8 +10,8 @@ public class FovAlgorithm {
 
     public static double delta = 1.5;
     public static double setFov = 10;
-    public static int minFov = RegisterConfig.getMinMultiple();
-    public static int maxFov = RegisterConfig.getMaxMultiple();
+    public static int minFov = RegisterConfig.minMultiplier.get();
+    public static int maxFov = RegisterConfig.maxMultiplier.get();
 
     //滚轮调焦
     public static void setFov(double tagDouble, double scroll) {

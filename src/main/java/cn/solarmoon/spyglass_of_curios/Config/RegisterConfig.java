@@ -41,21 +41,14 @@ public class RegisterConfig {
         disableMultiplierInfo = builder.comment("\n禁用倍率显示 Disable Multiplier Info").define("disableMultiplierInfo", false);
         builder.pop();
 
-        builder.push("倍率设置 Info Settings");
-        maxMultiplier = builder.comment("\n望远镜最大倍率 The maximum multiplier of spyglass [0,100]").define("maxMultiplier", 12);
-        minMultiplier = builder.comment("\n望远镜最小倍率 The minimum multiplier of spyglass [-100,100]\n最小值小于-15将会导致镜像反转 A minimum value less than -15 will cause the image to flip.").define("minMultiplier", -12);
+        builder.push("倍率设置 Multiplier Settings");
+        maxMultiplier = builder.comment("\n望远镜最大倍率 The maximum multiplier of spyglass").defineInRange("maxMultiplier", 12, 0, 100);
+        minMultiplier = builder.comment("\n望远镜最小倍率 The minimum multiplier of spyglass\n最小值小于-15将会导致镜像反转 A minimum value less than -15 will cause the image to flip.").defineInRange("minMultiplier", -12, -100, 100);
         builder.pop();
 
         deBug = builder.comment("用于调试 Used for test").define("deBug", false);
 
         common = builder.build();
-    }
-
-    public static int getMaxMultiple() {
-        return Mth.clamp(maxMultiplier.get(),0,100);
-    }
-    public static int getMinMultiple() {
-        return Mth.clamp(minMultiplier.get(),-100,100);
     }
 
     public static void register() {
