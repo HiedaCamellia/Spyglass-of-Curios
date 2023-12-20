@@ -165,12 +165,6 @@ dependencies {
     runtimeOnly fg.deobf("top.theillusivec4.curios:${curios_version}")
     compileOnly fg.deobf("top.theillusivec4.curios:${curios_version}:api")
 
-    //embeddium
-    implementation fg.deobf("org.embeddedt:embeddium-1.20.1:${embeddium_version}")
-
-    //oculus
-    implementation fg.deobf("maven.modrinth:oculus:${oculus_version}")
-
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
 }

@@ -82,7 +82,7 @@ public class SpyglassRenderer implements ICurioRenderer {
                 }
             }
             case "head" -> {
-                if (!RegisterConfig.disableRenderHead.get()){
+                if (!RegisterConfig.disableRenderHead.get()) {
                     if (living.isCrouching()) {
                         matrixStack.translate(0.0F, 0.26F, 0F);
                     }
