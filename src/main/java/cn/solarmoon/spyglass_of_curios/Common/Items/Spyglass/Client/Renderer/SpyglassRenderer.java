@@ -1,6 +1,6 @@
 package cn.solarmoon.spyglass_of_curios.Common.Items.Spyglass.Client.Renderer;
 
-import cn.solarmoon.spyglass_of_curios.init.RegisterConfig;
+import cn.solarmoon.spyglass_of_curios.Init.RegisterConfig;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.model.EntityModel;
