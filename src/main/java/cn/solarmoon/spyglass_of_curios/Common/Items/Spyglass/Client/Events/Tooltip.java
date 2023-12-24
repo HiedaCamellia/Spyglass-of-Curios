@@ -1,6 +1,6 @@
 package cn.solarmoon.spyglass_of_curios.Common.Items.Spyglass.Client.Events;
 
-import cn.solarmoon.spyglass_of_curios.init.RegisterConfig;
+import cn.solarmoon.spyglass_of_curios.Init.RegisterConfig;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;

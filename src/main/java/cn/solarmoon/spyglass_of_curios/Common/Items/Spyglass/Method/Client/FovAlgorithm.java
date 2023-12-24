@@ -1,6 +1,6 @@
 package cn.solarmoon.spyglass_of_curios.Common.Items.Spyglass.Method.Client;
 
-import cn.solarmoon.spyglass_of_curios.init.RegisterConfig;
+import cn.solarmoon.spyglass_of_curios.Init.RegisterConfig;
 import net.minecraft.util.Mth;
 
 import static cn.solarmoon.spyglass_of_curios.Util.Constants.MULTIPLIER;

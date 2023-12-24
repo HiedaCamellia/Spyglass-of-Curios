@@ -1,4 +1,4 @@
-package cn.solarmoon.spyglass_of_curios.init;
+package cn.solarmoon.spyglass_of_curios.Init;
 
 import cn.solarmoon.spyglass_of_curios.SpyglassOfCurios;
 import net.minecraftforge.common.ForgeConfigSpec;
