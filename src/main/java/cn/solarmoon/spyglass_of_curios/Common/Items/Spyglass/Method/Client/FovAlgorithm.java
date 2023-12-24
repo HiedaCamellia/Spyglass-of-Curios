@@ -30,7 +30,7 @@ public class FovAlgorithm {
 
     // 设置默认值
     public static void resetFov() {
-        MULTIPLIER = new Mt().alg(9);
+        MULTIPLIER = new Mt().alg(RegisterConfig.defaultMultiplier.get());
         deBug("resetMUL: " + MULTIPLIER);
     }
 

@@ -5,7 +5,7 @@
   "key.spyglass_of_curios.use": "Open Spyglass",
 
   "tooltip.spyglass_of_curios.multiplier": "§7§omultiplier: %s",
-  "tooltip.spyglass_of_curios.default_multiplier": "§7§omultiplier: §7§o9",
+  "tooltip.spyglass_of_curios.default_multiplier": "§7§omultiplier: %s",
 
   "switch.spyglass_of_curios.head": "§6Render Type: §fHead",
   "switch.spyglass_of_curios.back_waist": "§6Render Type: §fBack Waist",

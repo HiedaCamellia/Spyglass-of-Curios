@@ -24,7 +24,8 @@ public class Tooltip {
                 event.getToolTip().add(tooltip);
             }
         } else if (spyglass.is(Items.SPYGLASS)) {
-            Component tooltip = translation("tooltip", "default_multiplier");
+            int defaultMul = RegisterConfig.defaultMultiplier.get();
+            Component tooltip = translation("tooltip", "default_multiplier", "§7§o" + defaultMul);
             event.getToolTip().add(tooltip);
         }
     }

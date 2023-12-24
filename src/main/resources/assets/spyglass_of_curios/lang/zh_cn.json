@@ -5,7 +5,7 @@
   "key.spyglass_of_curios.use": "打开望远镜",
 
   "tooltip.spyglass_of_curios.multiplier": "§7§o倍率: %s",
-  "tooltip.spyglass_of_curios.default_multiplier": "§7§o倍率: §7§o9",
+  "tooltip.spyglass_of_curios.default_multiplier": "§7§o倍率: %s",
 
   "switch.spyglass_of_curios.head": "§6渲染模式：§f头",
   "switch.spyglass_of_curios.back_waist": "§6渲染模式：§f后腰",

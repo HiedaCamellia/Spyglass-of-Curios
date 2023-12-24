@@ -1,14 +1,13 @@
 package cn.solarmoon.spyglass_of_curios.Util;
 
+import cn.solarmoon.spyglass_of_curios.init.RegisterConfig;
 import net.minecraft.client.Minecraft;
-
-import static cn.solarmoon.spyglass_of_curios.Common.Items.Spyglass.Method.Client.FovAlgorithm.delta;
 
 
 public class Constants {
 
     //静态焦距
-    public static double MULTIPLIER = 1 - 9 * delta;
+    public static double MULTIPLIER = RegisterConfig.defaultMultiplier.get();
 
     public static Minecraft mc = Minecraft.getInstance();
 

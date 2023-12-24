@@ -23,6 +23,7 @@ public class RegisterConfig {
 
     public static ForgeConfigSpec.ConfigValue<Boolean> disableMultiplierInfo;
 
+    public static ForgeConfigSpec.ConfigValue<Integer> defaultMultiplier;
     public static ForgeConfigSpec.ConfigValue<Integer> maxMultiplier;
     public static ForgeConfigSpec.ConfigValue<Integer> minMultiplier;
 
@@ -41,6 +42,7 @@ public class RegisterConfig {
         builder.pop();
 
         builder.push("倍率设置 Multiplier Settings");
+        defaultMultiplier = builder.comment("\n望远镜默认倍率 The default multiplier of spyglass").define("defaultMultiplier", 7);
         maxMultiplier = builder.comment("\n望远镜最大倍率 The maximum multiplier of spyglass").defineInRange("maxMultiplier", 12, 0, 100);
         minMultiplier = builder.comment("\n望远镜最小倍率 The minimum multiplier of spyglass\n最小值小于-15将会导致镜像反转 A minimum value less than -15 will cause the image to flip.").defineInRange("minMultiplier", -12, -100, 100);
         builder.pop();
