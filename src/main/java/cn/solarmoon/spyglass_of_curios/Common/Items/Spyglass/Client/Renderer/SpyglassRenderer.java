@@ -1,9 +1,8 @@
 package cn.solarmoon.spyglass_of_curios.Common.Items.Spyglass.Client.Renderer;
 
-import cn.solarmoon.spyglass_of_curios.Config.RegisterConfig;
+import cn.solarmoon.spyglass_of_curios.init.RegisterConfig;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -20,7 +19,6 @@ import top.theillusivec4.curios.api.client.ICurioRenderer;
 
 import static cn.solarmoon.spyglass_of_curios.Util.Constants.mc;
 import static cn.solarmoon.spyglass_of_curios.Util.Constants.usingInCurio;
-import static cn.solarmoon.spyglass_of_curios.Util.DeBug.deBug;
 
 
 public class SpyglassRenderer implements ICurioRenderer {

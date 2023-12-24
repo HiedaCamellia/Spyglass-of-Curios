@@ -1,7 +1,6 @@
-package cn.solarmoon.spyglass_of_curios.Config;
+package cn.solarmoon.spyglass_of_curios.init;
 
 import cn.solarmoon.spyglass_of_curios.SpyglassOfCurios;
-import net.minecraft.util.Mth;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
