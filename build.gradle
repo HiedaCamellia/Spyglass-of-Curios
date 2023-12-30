@@ -1,6 +1,5 @@
 buildscript {
     repositories {
-        // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
         maven { url = 'https://maven.minecraftforge.net' }
         maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
         mavenCentral()
@@ -171,7 +170,7 @@ dependencies {
     runtimeOnly fg.deobf("org.embeddedt:${embeddium_version}")
 
     //oculus
-    runtimeOnly fg.deobf("maven.modrinth:oculus:${oculus_version}")
+    compileOnly fg.deobf("maven.modrinth:oculus:${oculus_version}")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 

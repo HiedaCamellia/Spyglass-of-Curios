@@ -1,6 +1,6 @@
 package cn.solarmoon.spyglass_of_curios;
 
-import cn.solarmoon.spyglass_of_curios.Init.RegisterConfig;
+import cn.solarmoon.spyglass_of_curios.Init.Config;
 import net.minecraftforge.fml.common.Mod;
 
 import static cn.solarmoon.spyglass_of_curios.SpyglassOfCurios.MOD_ID;
@@ -11,7 +11,7 @@ public class SpyglassOfCurios {
 
     public SpyglassOfCurios() {
 
-        RegisterConfig.register();
+        Config.register();
 
     }
 

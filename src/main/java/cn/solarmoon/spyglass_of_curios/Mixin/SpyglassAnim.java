@@ -1,6 +1,7 @@
 package cn.solarmoon.spyglass_of_curios.Mixin;
 
 import cn.solarmoon.spyglass_of_curios.Common.Items.Spyglass.Method.Client.FindSpyglassInHand;
+import cn.solarmoon.spyglass_of_curios.Init.Config;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
@@ -23,7 +24,7 @@ public abstract class SpyglassAnim {
         if (mc.player != null && useSpyglass.isDown() && !player.isUsingItem()) {
             FindSpyglassInHand finder = new FindSpyglassInHand();
             boolean hasSpyglass = finder.hasSpyglass();
-            if(!hasSpyglass || usingInCurio) {
+            if((!Config.disableAimingAnim.get() && !hasSpyglass) || usingInCurio) {
                 if(hand.equals(InteractionHand.OFF_HAND)) cir.setReturnValue(HumanoidModel.ArmPose.SPYGLASS);
                 if(hand.equals(InteractionHand.MAIN_HAND)) cir.setReturnValue(HumanoidModel.ArmPose.EMPTY);
             }
