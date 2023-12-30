@@ -1,6 +1,6 @@
 package cn.solarmoon.spyglass_of_curios.Common.Items.Spyglass.Client.Events;
 
-import cn.solarmoon.spyglass_of_curios.Init.RegisterConfig;
+import cn.solarmoon.spyglass_of_curios.Init.Config;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -14,7 +14,7 @@ public class Tooltip {
     //TOOLTIP根据望远镜NBT显示倍率
     @SubscribeEvent
     public void spyglassTooltip(ItemTooltipEvent event) {
-        if(RegisterConfig.disableMultiplierInfo.get()) return;
+        if(Config.disableMultiplierInfo.get()) return;
         ItemStack spyglass = event.getItemStack();
         if (spyglass.is(Items.SPYGLASS) && spyglass.hasTag()) {
             CompoundTag tag = spyglass.getTag();
@@ -24,7 +24,7 @@ public class Tooltip {
                 event.getToolTip().add(tooltip);
             }
         } else if (spyglass.is(Items.SPYGLASS)) {
-            int defaultMul = RegisterConfig.defaultMultiplier.get();
+            int defaultMul = Config.defaultMultiplier.get();
             Component tooltip = translation("tooltip", "default_multiplier", "§7§o" + defaultMul);
             event.getToolTip().add(tooltip);
         }

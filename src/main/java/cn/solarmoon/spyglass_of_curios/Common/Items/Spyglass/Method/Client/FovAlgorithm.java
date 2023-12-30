@@ -1,6 +1,6 @@
 package cn.solarmoon.spyglass_of_curios.Common.Items.Spyglass.Method.Client;
 
-import cn.solarmoon.spyglass_of_curios.Init.RegisterConfig;
+import cn.solarmoon.spyglass_of_curios.Init.Config;
 import net.minecraft.util.Mth;
 
 import static cn.solarmoon.spyglass_of_curios.Util.Constants.MULTIPLIER;
@@ -10,8 +10,8 @@ public class FovAlgorithm {
 
     public static double delta = 1.5;
     public static double setFov = 10;
-    public static int minFov = RegisterConfig.minMultiplier.get();
-    public static int maxFov = RegisterConfig.maxMultiplier.get();
+    public static int minFov = Config.minMultiplier.get();
+    public static int maxFov = Config.maxMultiplier.get();
 
     //滚轮调焦
     public static void setFov(double tagDouble, double scroll) {
@@ -24,13 +24,13 @@ public class FovAlgorithm {
 
     // 设置默认为tag值
     public static void setDefaultFov(double tagDouble) {
-        MULTIPLIER = tagDouble>0 ? new Mt().alg(tagDouble) : 1-tagDouble/10;
+        MULTIPLIER = tagDouble > 0 ? new Mt().alg(tagDouble) : 1-tagDouble/10;
         deBug("TagMUL: " + MULTIPLIER);
     }
 
     // 设置默认值
     public static void resetFov() {
-        MULTIPLIER = new Mt().alg(RegisterConfig.defaultMultiplier.get());
+        MULTIPLIER = new Mt().alg(Config.defaultMultiplier.get());
         deBug("resetMUL: " + MULTIPLIER);
     }
 

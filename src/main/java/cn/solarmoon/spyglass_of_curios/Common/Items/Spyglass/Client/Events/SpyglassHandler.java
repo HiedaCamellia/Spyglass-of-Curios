@@ -8,6 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -39,11 +40,7 @@ public class SpyglassHandler {
             if (flag && hasSpyglassInHand) {
                 if (client.gameMode != null) {
                     client.gameMode.useItem(player, hand);
-                    FovAlgorithm.resetFov();
-                    if (spyglass.getTag() != null) {
-                        double tagDouble = spyglass.getTag().getDouble("MULTIPLIER");
-                        FovAlgorithm.setDefaultFov(tagDouble);
-                    } else PacketRegister.sendPacket(FovAlgorithm.putTag(), renderType, "spyglassPutNBT");
+                    setFov(spyglass);
                 }
                 usingInHand = true;
                 return;
@@ -55,10 +52,7 @@ public class SpyglassHandler {
             if (!hasSpyglassInCurio || hasSpyglassInHand) return;
             if (mc.player != null) {
                 PacketRegister.sendPacket(MULTIPLIER, renderType, "playSound1");
-                FovAlgorithm.resetFov();
-                if (spyglassCurio.hasTag()) {
-                    FovAlgorithm.setDefaultFov(Objects.requireNonNull(spyglassCurio.getTag()).getDouble("MULTIPLIER"));
-                } else PacketRegister.sendPacket(FovAlgorithm.putTag(), renderType, "spyglassPutNBT");
+                setFov(spyglassCurio);
             }
             usingInCurio = true;
 
@@ -78,10 +72,25 @@ public class SpyglassHandler {
 
     }
 
-    //防止使用望远镜时使用物品
+    //防止使用望远镜时使用物品，以及使用时注入tag，
     @SubscribeEvent
     public void preventUse(LivingEntityUseItemEvent event) {
-        if(usingInCurio) event.setCanceled(true);
+        if (usingInCurio) event.setCanceled(true);
+
+        if(event.getEntity().isUsingItem()) return;
+        ItemStack spyglass = event.getItem();
+        setFov(spyglass);
+    }
+
+    //根据倍率tag的有无来决定是读取tag设置倍率还是设置默认倍率
+    public void setFov(ItemStack spyglass) {
+        if(!spyglass.is(Items.SPYGLASS)) return;
+        boolean tagCheck = spyglass.getTag() != null && spyglass.getTag().contains("MULTIPLIER");
+        FovAlgorithm.resetFov();
+        if (tagCheck) {
+            double tagDouble = spyglass.getTag().getDouble("MULTIPLIER");
+            FovAlgorithm.setDefaultFov(tagDouble);
+        } else PacketRegister.sendPacket(FovAlgorithm.putTag(), renderType, "spyglassPutNBT");
     }
 
 }

@@ -1,6 +1,6 @@
 package cn.solarmoon.spyglass_of_curios.Common.Items.Spyglass.Client.Renderer;
 
-import cn.solarmoon.spyglass_of_curios.Init.RegisterConfig;
+import cn.solarmoon.spyglass_of_curios.Init.Config;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.model.EntityModel;
@@ -57,7 +57,7 @@ public class SpyglassRenderer implements ICurioRenderer {
             itemRenderer.render(stack, ItemTransforms.TransformType.NONE, true, matrixStack, renderTypeBuffer, light, OverlayTexture.NO_OVERLAY, spyglass);
             matrixStack.popPose();
         }
-        if(RegisterConfig.disableRenderAll.get() || usingInCurio) return;
+        if(Config.disableRenderAll.get() || usingInCurio) return;
         matrixStack.pushPose();
         if (stack.getTag() != null) {
             if (stack.getTag().contains("renderType")) {
@@ -70,7 +70,7 @@ public class SpyglassRenderer implements ICurioRenderer {
         }
         switch (nbt) {
             case "back_waist" -> {
-                if (!RegisterConfig.disableRenderBackWaist.get()) {
+                if (!Config.disableRenderBackWaist.get()) {
                     if (living.isCrouching()) {
                         matrixStack.translate(0.0F, 0.14F, 0.3F);
                     }
@@ -80,7 +80,7 @@ public class SpyglassRenderer implements ICurioRenderer {
                 }
             }
             case "head" -> {
-                if (!RegisterConfig.disableRenderHead.get()) {
+                if (!Config.disableRenderHead.get()) {
                     if (living.isCrouching()) {
                         matrixStack.translate(0.0F, 0.26F, 0F);
                     }
@@ -93,7 +93,7 @@ public class SpyglassRenderer implements ICurioRenderer {
                 }
             }
             case "indescribable" -> {
-                if (!RegisterConfig.disableRenderIndescribable.get()) {
+                if (!Config.disableRenderIndescribable.get()) {
                     if (living.isCrouching()) {
                         matrixStack.translate(0.0F, 0.14F, 0.3F);
                     }

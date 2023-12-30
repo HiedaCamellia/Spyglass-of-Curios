@@ -1,6 +1,6 @@
 package cn.solarmoon.spyglass_of_curios;
 
-import cn.solarmoon.spyglass_of_curios.Init.RegisterConfig;
+import cn.solarmoon.spyglass_of_curios.Init.Config;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -24,7 +24,7 @@ public class SpyglassOfCurios {
             FMLJavaModLoadingContext.get().getModEventBus().addListener(this::SetupRes);
         }
 
-        RegisterConfig.register();
+        Config.register();
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
 

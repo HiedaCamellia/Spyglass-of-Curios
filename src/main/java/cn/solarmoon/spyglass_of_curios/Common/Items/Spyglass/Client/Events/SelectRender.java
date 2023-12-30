@@ -1,6 +1,6 @@
 package cn.solarmoon.spyglass_of_curios.Common.Items.Spyglass.Client.Events;
 
-import cn.solarmoon.spyglass_of_curios.Init.RegisterConfig;
+import cn.solarmoon.spyglass_of_curios.Init.Config;
 import cn.solarmoon.spyglass_of_curios.Network.PacketRegister;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
@@ -18,10 +18,10 @@ public class SelectRender {
     @SubscribeEvent
     public void setRenderType(PlayerInteractEvent.LeftClickEmpty event) {
         Player player = mc.player;
-        if(RegisterConfig.disableRenderAll.get()) return;
+        if(Config.disableRenderAll.get()) return;
         if (player != null && event.getItemStack().is(Items.SPYGLASS) && player.isCrouching()) {
             String[] renderTypes = {"back_waist", "head", "indescribable"};
-            Boolean[] disableRenders = {RegisterConfig.disableRenderBackWaist.get(), RegisterConfig.disableRenderHead.get(), RegisterConfig.disableRenderIndescribable.get()};
+            Boolean[] disableRenders = {Config.disableRenderBackWaist.get(), Config.disableRenderHead.get(), Config.disableRenderIndescribable.get()};
             if (Arrays.stream(disableRenders).allMatch(Boolean::booleanValue)) return;
             int index = Arrays.asList(renderTypes).indexOf(renderType);
             do {
