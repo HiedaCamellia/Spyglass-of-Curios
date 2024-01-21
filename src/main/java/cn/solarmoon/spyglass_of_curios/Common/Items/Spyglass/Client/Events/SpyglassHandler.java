@@ -3,6 +3,7 @@ package cn.solarmoon.spyglass_of_curios.Common.Items.Spyglass.Client.Events;
 import cn.solarmoon.spyglass_of_curios.Common.Items.Spyglass.Method.Client.FindSpyglassInHand;
 import cn.solarmoon.spyglass_of_curios.Common.Items.Spyglass.Method.Client.FovAlgorithm;
 import cn.solarmoon.spyglass_of_curios.Common.Items.Spyglass.Method.FindSpyglassInCurio;
+import cn.solarmoon.spyglass_of_curios.Init.Config;
 import cn.solarmoon.spyglass_of_curios.Network.PacketRegister;
 import cn.solarmoon.spyglass_of_curios.Util.DeBug;
 import cn.solarmoon.spyglass_of_curios.Util.ICinemaMode;
@@ -106,20 +107,22 @@ public class SpyglassHandler {
     }
 
     public void cinema(Player player) {
-        Options options = mc.options;
-        if (!player.isScoping() && !cameraCheck) {
-            originSensitive = options.sensitivity().get();
-        }
-        if (player.isScoping()) {
-            if (!cameraCheck) {
-                ((ICinemaMode) options).setSmoothCamera(true);
-                cameraCheck = true;
+        if (!Config.disableCinemaCamera.get()) {
+            Options options = mc.options;
+            if (!player.isScoping() && !cameraCheck) {
+                originSensitive = options.sensitivity().get();
             }
-            options.sensitivity().set(calculate());
-        } else if (!player.isScoping() && cameraCheck) {
-            options.sensitivity().set(originSensitive);
-            ((ICinemaMode) options).setSmoothCamera(false);
-            cameraCheck = false;
+            if (player.isScoping()) {
+                if (!cameraCheck) {
+                    ((ICinemaMode) options).setSmoothCamera(true);
+                    cameraCheck = true;
+                }
+                options.sensitivity().set(calculate());
+            } else if (!player.isScoping() && cameraCheck) {
+                options.sensitivity().set(originSensitive);
+                ((ICinemaMode) options).setSmoothCamera(false);
+                cameraCheck = false;
+            }
         }
     }
 
