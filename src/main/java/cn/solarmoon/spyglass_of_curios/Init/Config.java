@@ -27,6 +27,8 @@ public class Config {
     public static ForgeConfigSpec.ConfigValue<Integer> maxMultiplier;
     public static ForgeConfigSpec.ConfigValue<Integer> minMultiplier;
 
+    public static ForgeConfigSpec.ConfigValue<Boolean> disableCinemaCamera;
+
     public static ForgeConfigSpec.ConfigValue<Boolean> disableAimingAnim;
 
     static {
@@ -47,6 +49,10 @@ public class Config {
         defaultMultiplier = builder.comment("\n望远镜默认倍率 The default multiplier of spyglass.").define("defaultMultiplier", 7);
         maxMultiplier = builder.comment("\n望远镜最大倍率 The maximum multiplier of spyglass.").defineInRange("maxMultiplier", 12, 0, 100);
         minMultiplier = builder.comment("\n望远镜最小倍率 The minimum multiplier of spyglass.\n最小值小于-15将会导致镜像反转 A minimum value less than -15 will cause the image to flip.").defineInRange("minMultiplier", -12, -100, 100);
+        builder.pop();
+
+        builder.push("显示设置 Display Settings");
+        disableCinemaCamera = builder.comment("\n禁用使用望远镜时的电影视角 Disable cinema camera when is scoping.").define("disableCinemaCamera", false);
         builder.pop();
 
         builder.push("动画设置 Animation Settings");
