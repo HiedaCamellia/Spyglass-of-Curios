@@ -104,20 +104,22 @@ public class SpyglassHandler {
     }
 
     public void cinema(Player player) {
-        Options options = mc.options;
-        if (!player.isScoping() && !cameraCheck) {
-            originSensitive = options.sensitivity().get();
-        }
-        if (player.isScoping()) {
-            if (!cameraCheck) {
-                ((ICinemaMode) options).setSmoothCamera(true);
-                cameraCheck = true;
+        if (!Config.disableCinemaCamera.get()) {
+            Options options = mc.options;
+            if (!player.isScoping() && !cameraCheck) {
+                originSensitive = options.sensitivity().get();
             }
-            options.sensitivity().set(calculate());
-        } else if (!player.isScoping() && cameraCheck) {
-            options.sensitivity().set(originSensitive);
-            ((ICinemaMode) options).setSmoothCamera(false);
-            cameraCheck = false;
+            if (player.isScoping()) {
+                if (!cameraCheck) {
+                    ((ICinemaMode) options).setSmoothCamera(true);
+                    cameraCheck = true;
+                }
+                options.sensitivity().set(calculate());
+            } else if (!player.isScoping() && cameraCheck) {
+                options.sensitivity().set(originSensitive);
+                ((ICinemaMode) options).setSmoothCamera(false);
+                cameraCheck = false;
+            }
         }
     }
 
