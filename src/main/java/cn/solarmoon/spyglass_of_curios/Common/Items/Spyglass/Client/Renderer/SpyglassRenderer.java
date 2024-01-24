@@ -43,7 +43,7 @@ public class SpyglassRenderer implements ICurioRenderer {
         ItemRenderer itemRenderer = mc.getItemRenderer();
         LivingEntity living = slotContext.entity();
         BakedModel spyglass = itemRenderer.getModel(Items.SPYGLASS.getDefaultInstance(), mc.level, mc.player, 1);
-        if(usingInCurio){
+        if (mc.player != null && usingInCurio && living.is(mc.player)) {
             matrixStack.pushPose();
             if (living.isCrouching()) {
                 matrixStack.translate(0.0F, 0.26F, 0F);
@@ -57,7 +57,7 @@ public class SpyglassRenderer implements ICurioRenderer {
             itemRenderer.render(stack, ItemDisplayContext.NONE, true, matrixStack, renderTypeBuffer, light, OverlayTexture.NO_OVERLAY, spyglass);
             matrixStack.popPose();
         }
-        if(Config.disableRenderAll.get() || usingInCurio) return;
+        if(Config.disableRenderAll.get() || (usingInCurio && living.is(mc.player))) return;
         matrixStack.pushPose();
         if (stack.getTag() != null) {
             if (stack.getTag().contains("renderType")) {

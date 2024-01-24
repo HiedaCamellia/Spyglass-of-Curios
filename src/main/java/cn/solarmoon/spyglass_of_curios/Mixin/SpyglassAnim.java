@@ -21,7 +21,7 @@ public abstract class SpyglassAnim {
     //当按下按键就举起手来！
     @Inject(method = "getArmPose", at = @At("HEAD"), cancellable = true)
     private static void getArmPose(AbstractClientPlayer player, InteractionHand hand, CallbackInfoReturnable<HumanoidModel.ArmPose> cir) {
-        if (mc.player != null && useSpyglass.isDown() && !player.isUsingItem()) {
+        if (mc.player != null && useSpyglass.isDown() && !player.isUsingItem() && player.is(mc.player)) {
             FindSpyglassInHand finder = new FindSpyglassInHand();
             boolean hasSpyglass = finder.hasSpyglass();
             if((!Config.disableAimingAnim.get() && !hasSpyglass) || usingInCurio) {
@@ -30,6 +30,5 @@ public abstract class SpyglassAnim {
             }
         }
     }
-
 
 }

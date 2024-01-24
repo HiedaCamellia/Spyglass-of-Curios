@@ -26,7 +26,7 @@ public abstract class RenderItem<T extends LivingEntity>{
     @Inject(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/LivingEntity;FFFFFF)V", at = @At(value = "HEAD"), cancellable = true)
     public void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, T t, float p1, float p2, float p3, float p4, float p5, float p6, CallbackInfo ci) {
         FindSpyglassInCurio curioFinder = new FindSpyglassInCurio();
-        if (useSpyglass.isDown() && curioFinder.hasSpyglass(mc.player) && (!usingInHand || usingInCurio)) {
+        if (mc.player != null && useSpyglass.isDown() && curioFinder.hasSpyglass(mc.player) && (!usingInHand || usingInCurio) && t.is(mc.player)) {
             this.renderArmWithItem(t, t.getMainHandItem(), ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, HumanoidArm.RIGHT, poseStack, multiBufferSource, i);
             ci.cancel();
         }
