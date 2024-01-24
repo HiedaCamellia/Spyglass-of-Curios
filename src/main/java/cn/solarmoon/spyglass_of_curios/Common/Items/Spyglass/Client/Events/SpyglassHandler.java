@@ -112,13 +112,13 @@ public class SpyglassHandler {
             if (!player.isScoping() && !cameraCheck) {
                 originSensitive = options.sensitivity().get();
             }
-            if (player.isScoping()) {
-                if (!cameraCheck) {
+            if (player.isScoping() && mc.options.getCameraType().isFirstPerson()) {
+                if (!cameraCheck && mc.options.getCameraType().isFirstPerson()) {
                     ((ICinemaMode) options).setSmoothCamera(true);
                     cameraCheck = true;
                 }
                 options.sensitivity().set(calculate());
-            } else if (!player.isScoping() && cameraCheck) {
+            } else if ( ( !player.isScoping() || !mc.options.getCameraType().isFirstPerson() ) && cameraCheck ) {
                 options.sensitivity().set(originSensitive);
                 ((ICinemaMode) options).setSmoothCamera(false);
                 cameraCheck = false;
