@@ -1,4 +1,4 @@
-package cn.solarmoon.spyglass_of_curios.Network;
+package cn.solarmoon.spyglass_of_curios.network;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -39,7 +39,15 @@ public class PacketRegister {
     }
 
     public static void sendPacket(double multiplier, String renderType, String handle) {
-        instance.sendToServer(new SpyglassUsePacket(multiplier, renderType, handle));
+        instance.sendToServer(new SpyglassUsePacket(multiplier, renderType, false, handle));
+    }
+
+    public static void sendPacket(boolean flag ,String handle) {
+        instance.sendToServer(new SpyglassUsePacket(0, "", flag, handle));
+    }
+
+    public static void sendPacket(String handle) {
+        instance.sendToServer(new SpyglassUsePacket(0, "", false, handle));
     }
 
     //注册数据包

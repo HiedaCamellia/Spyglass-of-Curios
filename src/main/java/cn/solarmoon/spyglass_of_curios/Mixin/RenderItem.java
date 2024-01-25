@@ -1,6 +1,6 @@
-package cn.solarmoon.spyglass_of_curios.Mixin;
+package cn.solarmoon.spyglass_of_curios.mixin;
 
-import cn.solarmoon.spyglass_of_curios.Common.Items.Spyglass.Method.FindSpyglassInCurio;
+import cn.solarmoon.spyglass_of_curios.common.ic.ISpyUser;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
@@ -14,9 +14,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static cn.solarmoon.spyglass_of_curios.Common.Items.RegisterItems.useSpyglass;
-import static cn.solarmoon.spyglass_of_curios.Util.Constants.*;
-
 @Mixin(ItemInHandLayer.class)
 public abstract class RenderItem<T extends LivingEntity>{
 
@@ -25,8 +22,8 @@ public abstract class RenderItem<T extends LivingEntity>{
     //按住时替换副手渲染
     @Inject(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/LivingEntity;FFFFFF)V", at = @At(value = "HEAD"), cancellable = true)
     public void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, T t, float p1, float p2, float p3, float p4, float p5, float p6, CallbackInfo ci) {
-        FindSpyglassInCurio curioFinder = new FindSpyglassInCurio();
-        if (mc.player != null && useSpyglass.isDown() && curioFinder.hasSpyglass(mc.player) && (!usingInHand || usingInCurio) && t.is(mc.player)) {
+        ISpyUser sp = (ISpyUser) t;
+        if (sp.usingSpyglassInCurio()) {
             this.renderArmWithItem(t, t.getMainHandItem(), ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, HumanoidArm.RIGHT, poseStack, multiBufferSource, i);
             ci.cancel();
         }

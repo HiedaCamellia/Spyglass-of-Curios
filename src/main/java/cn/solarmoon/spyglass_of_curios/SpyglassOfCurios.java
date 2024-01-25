@@ -1,6 +1,6 @@
 package cn.solarmoon.spyglass_of_curios;
 
-import cn.solarmoon.spyglass_of_curios.Init.Config;
+import cn.solarmoon.spyglass_of_curios.init.Config;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

@@ -1,6 +1,6 @@
-package cn.solarmoon.spyglass_of_curios.Network;
+package cn.solarmoon.spyglass_of_curios.network;
 
-import cn.solarmoon.spyglass_of_curios.Common.Items.Spyglass.Method.FindSpyglassInCurio;
+import cn.solarmoon.spyglass_of_curios.util.SpyglassUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.sounds.SoundEvents;
@@ -15,19 +15,21 @@ import java.util.Objects;
 import java.util.function.Supplier;
 
 
-public record SpyglassUsePacket(double multiplier, String renderType, String Handle) {
+public record SpyglassUsePacket(double multiplier, String renderType, boolean flag, String Handle) {
 
     public void encode(FriendlyByteBuf buf) {
         buf.writeUtf(Handle);
         buf.writeDouble(multiplier);
         buf.writeUtf(renderType);
+        buf.writeBoolean(flag);
     }
 
     public static SpyglassUsePacket decode(FriendlyByteBuf buf) {
         String Handle = buf.readUtf(32767);
         double multiplier = buf.readDouble();
         String renderType = buf.readUtf();
-        return new SpyglassUsePacket(multiplier, renderType, Handle);
+        boolean flag = buf.readBoolean();
+        return new SpyglassUsePacket(multiplier, renderType, flag, Handle);
     }
 
     public static void handle(SpyglassUsePacket packet, Supplier<NetworkEvent.Context> supplier) {
@@ -36,15 +38,16 @@ public record SpyglassUsePacket(double multiplier, String renderType, String Han
             Player player = context.getSender();
             Level level = Objects.requireNonNull(context.getSender()).level;
             double mul = packet.multiplier;
+            boolean flag = packet.flag;
             if (player == null) return;
             switch (packet.Handle) {
                 case "spyglassPutNBT" -> {
-                    FindSpyglassInCurio curioFinder = new FindSpyglassInCurio();
-                    boolean hasSpyglass = curioFinder.hasSpyglass(player);
+                    SpyglassUtil.Finder.Curio curioFinder = new SpyglassUtil.Finder.Curio(player);
+                    boolean hasSpyglass = curioFinder.hasSpyglass();
 
                     ItemStack spyglass = ItemStack.EMPTY;
                     if (player.isUsingItem()) spyglass = player.getUseItem();
-                    else if (!player.isUsingItem() && hasSpyglass) spyglass = curioFinder.getSpyglass(player);
+                    else if (!player.isUsingItem() && hasSpyglass) spyglass = curioFinder.getSpyglass();
 
                     if (spyglass.is(Items.SPYGLASS)) {
                         CompoundTag tag = spyglass.getOrCreateTag();
@@ -58,15 +61,19 @@ public record SpyglassUsePacket(double multiplier, String renderType, String Han
                             tag.putString("renderType", packet.renderType);
                         }
                 }
-                case "playSound1" -> {
-                    if(!level.isClientSide) level.playSound(null, player.getOnPos(), SoundEvents.SPYGLASS_USE, SoundSource.PLAYERS, 1f, 1f);
-                }
-                case "playSound2" -> {
-                    if(!level.isClientSide) level.playSound(null, player.getOnPos(), SoundEvents.SPYGLASS_STOP_USING, SoundSource.PLAYERS, 1f, 1f);
-                }
-                case "playSound3" -> {
+                case "soundRoll" -> {
                     float volume = (float) (1.0f + (1 * (1 - mul) * (1 - mul)));
                     if(!level.isClientSide) level.playSound(null, player.getOnPos(), SoundEvents.SPYGLASS_STOP_USING, SoundSource.PLAYERS, volume, 1f);
+                }
+                case "using" -> {
+                    ItemStack spyglass = new SpyglassUtil.Finder.Curio(player).getSpyglass();
+                    spyglass.getOrCreateTag().putBoolean("using", flag);
+                }
+                case "soundUse" -> {
+                    level.playSound(null, player.getOnPos(), SoundEvents.SPYGLASS_USE, SoundSource.PLAYERS, 1f, 1f);
+                }
+                case "soundStop" -> {
+                    level.playSound(null, player.getOnPos(), SoundEvents.SPYGLASS_STOP_USING, SoundSource.PLAYERS, 1f, 1f);
                 }
             }
         });

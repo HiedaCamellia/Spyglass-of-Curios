@@ -1,6 +1,6 @@
-package cn.solarmoon.spyglass_of_curios.Mixin;
+package cn.solarmoon.spyglass_of_curios.mixin;
 
-import cn.solarmoon.spyglass_of_curios.Util.ICinemaMode;
+import cn.solarmoon.spyglass_of_curios.common.ic.ICinemaMode;
 import net.minecraft.client.Options;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -14,5 +14,6 @@ public abstract class OptionsMixin implements ICinemaMode {
     public void setSmoothCamera(boolean value) {
         this.smoothCamera = value;
     }
+
 }
 

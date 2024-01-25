@@ -1,4 +1,4 @@
-package cn.solarmoon.spyglass_of_curios.Init;
+package cn.solarmoon.spyglass_of_curios.init;
 
 import cn.solarmoon.spyglass_of_curios.SpyglassOfCurios;
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -27,39 +27,73 @@ public class Config {
     public static ForgeConfigSpec.ConfigValue<Integer> maxMultiplier;
     public static ForgeConfigSpec.ConfigValue<Integer> minMultiplier;
 
-    public static ForgeConfigSpec.ConfigValue<Boolean> disableCinemaCamera;
-
-    public static ForgeConfigSpec.ConfigValue<Boolean> disableAimingAnim;
+    public static ForgeConfigSpec.ConfigValue<Boolean> enableCinemaCamera;
 
     static {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 
-        builder.push("渲染设置 Render Settings");
-        disableRenderAll = builder.comment("\n禁用所有渲染 Disable Render for ALL.").define("disableRenderAll", false);
-        disableRenderBackWaist = builder.comment("\n禁用渲染 - 后腰 Disable Render - Back waist.").define("disableRenderBackWaist", false);
-        disableRenderHead = builder.comment("\n禁用渲染 - 头 Disable Render - Head.").define("disableRenderHead", false);
-        disableRenderIndescribable = builder.comment("\n禁用渲染 - 不可描述 Disable Render - Indescribable.").define("disableRenderIndescribable", false);
+        deBug = builder
+                .comment("Used for test.")
+                .comment("用于调试")
+                .define("deBug", false);
+
+        builder
+                .comment("Render Settings")
+                .push("渲染设置");
+        disableRenderAll = builder
+                .comment("Disable Render for ALL.")
+                .comment("禁用所有渲染")
+                .define("disableRenderAll", false);
+        disableRenderBackWaist = builder
+                .comment("Disable Render - Back waist.")
+                .comment("禁用渲染 - 后腰")
+                .define("disableRenderBackWaist", false);
+        disableRenderHead = builder
+                .comment("Disable Render - Head.")
+                .comment("禁用渲染 - 头")
+                .define("disableRenderHead", false);
+        disableRenderIndescribable = builder
+                .comment("Disable Render - Indescribable.")
+                .comment("禁用渲染 - 不可描述")
+                .define("disableRenderIndescribable", false);
         builder.pop();
 
-        builder.push("信息设置 Info Settings");
-        disableMultiplierInfo = builder.comment("\n禁用倍率显示 Disable Multiplier Info.").define("disableMultiplierInfo", false);
+        builder
+                .comment("Info Settings")
+                .push("信息设置");
+        disableMultiplierInfo = builder
+                .comment("Disable Multiplier Info.")
+                .comment("禁用倍率显示")
+                .define("disableMultiplierInfo", false);
         builder.pop();
 
-        builder.push("倍率设置 Multiplier Settings");
-        defaultMultiplier = builder.comment("\n望远镜默认倍率 The default multiplier of spyglass.").define("defaultMultiplier", 7);
-        maxMultiplier = builder.comment("\n望远镜最大倍率 The maximum multiplier of spyglass.").defineInRange("maxMultiplier", 12, 0, 100);
-        minMultiplier = builder.comment("\n望远镜最小倍率 The minimum multiplier of spyglass.\n最小值小于-15将会导致镜像反转 A minimum value less than -15 will cause the image to flip.").defineInRange("minMultiplier", -12, -100, 100);
+        builder
+                .comment("Multiplier Settings")
+                .push("倍率设置");
+        defaultMultiplier = builder
+                .comment("The default multiplier of spyglass.")
+                .comment("望远镜默认倍率")
+                .define("defaultMultiplier", 7);
+        maxMultiplier = builder
+                .comment("The maximum multiplier of spyglass.")
+                .comment("望远镜最大倍率")
+                .defineInRange("maxMultiplier", 12, 0, 100);
+        minMultiplier = builder
+                .comment("The minimum multiplier of spyglass.")
+                .comment("A minimum value less than -15 will cause the image to flip.")
+                .comment("望远镜最小倍率")
+                .comment("最小值小于-15将会导致镜像反转")
+                .defineInRange("minMultiplier", -12, -100, 100);
         builder.pop();
 
-        builder.push("显示设置 Display Settings");
-        disableCinemaCamera = builder.comment("\n禁用使用望远镜时的电影视角 Disable cinema camera when is scoping.").define("disableCinemaCamera", false);
+        builder
+                .comment("Display Settings")
+                .push("显示设置");
+        enableCinemaCamera = builder
+                .comment("Enable cinematic camera when scoping (Just like Optifine).")
+                .comment("启用使用望远镜时的电影视角（就像Optifine的放大一样）")
+                .define("enableCinemaCamera", false);
         builder.pop();
-
-        builder.push("动画设置 Animation Settings");
-        disableAimingAnim = builder.comment("\n是否当不持有望远镜时按下按键也能使用望远镜动作 Whether the spyglass Anim can be used by pressing the key when not holding the spyglass.").define("disableAimingAnim", false);
-        builder.pop();
-
-        deBug = builder.comment("用于调试 Used for test.").define("deBug", false);
 
         common = builder.build();
     }

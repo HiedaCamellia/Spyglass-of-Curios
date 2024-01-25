@@ -1,9 +1,9 @@
-package cn.solarmoon.spyglass_of_curios.Util;
+package cn.solarmoon.spyglass_of_curios.util;
 
 import cn.solarmoon.spyglass_of_curios.SpyglassOfCurios;
 import net.minecraft.network.chat.Component;
 
-public class Translation {
+public class TextUtil {
 
     public static Component translation(String string1, Object... objects) {
         return Component.translatable(string1 + "." + SpyglassOfCurios.MOD_ID, objects);
