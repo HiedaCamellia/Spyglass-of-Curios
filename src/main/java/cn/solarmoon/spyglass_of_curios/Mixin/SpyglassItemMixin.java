@@ -36,18 +36,25 @@ public class SpyglassItemMixin extends Item implements ICurioItem {
         super(properties);
     }
 
+    /**
+     * 保证在tick中只使用一次要执行的指令
+     */
+    private boolean onceCheck = false;
+
     @Override
     public void curioTick(SlotContext slotContext, ItemStack stack) {
         Player player = (Player) slotContext.entity();
-        Level level = player.level;
 
         player = Minecraft.getInstance().player != null ? Minecraft.getInstance().player : player;
         ISpyUser sp = (ISpyUser) player;
 
         if (Keys.useSpyglass.isDown() && !player.isUsingItem() && !player.isScoping() && !sp.usingSpyglassInCurio()) {
-            SpyglassUtil.setFov(sp.getSpyglassInCurio(), level, sp);
+            SpyglassUtil.setFov(sp.getSpyglassInCurio(), sp);
             PacketRegister.sendPacket(true, "using");
-            PacketRegister.sendPacket("soundUse");
+            if (!onceCheck) {
+                PacketRegister.sendPacket("soundUse");
+                onceCheck = true;
+            }
         }
 
         if (!Keys.useSpyglass.isDown()) {
@@ -55,7 +62,10 @@ public class SpyglassItemMixin extends Item implements ICurioItem {
             //同时客户端单侧可能会因为一个sp的空按键导致执行，因此必须放入使用后的条件内
             if (sp.usingSpyglassInCurio()) {
                 PacketRegister.sendPacket(false, "using");
-                PacketRegister.sendPacket("soundStop");
+                if (onceCheck) {
+                    PacketRegister.sendPacket("soundStop");
+                    onceCheck = false;
+                }
             }
         }
 
@@ -76,7 +86,7 @@ public class SpyglassItemMixin extends Item implements ICurioItem {
                 if (Minecraft.getInstance().gameMode != null) {
                     Minecraft.getInstance().gameMode.useItem(player, hand);
                 }
-                SpyglassUtil.setFov(spyglass, level, sp);
+                SpyglassUtil.setFov(spyglass, sp);
             }
         }
         super.inventoryTick(stack, level, entity, delta, flag);
