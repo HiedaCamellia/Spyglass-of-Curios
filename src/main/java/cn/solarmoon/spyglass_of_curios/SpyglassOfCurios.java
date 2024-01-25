@@ -1,6 +1,6 @@
 package cn.solarmoon.spyglass_of_curios;
 
-import cn.solarmoon.spyglass_of_curios.Init.Config;
+import cn.solarmoon.spyglass_of_curios.init.Config;
 import net.minecraftforge.fml.common.Mod;
 
 import static cn.solarmoon.spyglass_of_curios.SpyglassOfCurios.MOD_ID;
