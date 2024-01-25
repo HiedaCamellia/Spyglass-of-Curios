@@ -17,10 +17,9 @@ public class SpyglassUtil {
     /**
      * 根据倍率tag的有无来决定是读取tag设置倍率还是设置默认倍率
      * @param spyglass tag读取/写入源
-     * @param level 判断是否为客户端侧（单侧生效）
      */
-    public static void setFov(ItemStack spyglass, Level level, ISpyUser sp) {
-        if(!spyglass.is(Items.SPYGLASS) || !level.isClientSide) return;
+    public static void setFov(ItemStack spyglass, ISpyUser sp) {
+        if(!spyglass.is(Items.SPYGLASS)) return;
         boolean tagCheck = spyglass.getTag() != null && spyglass.getTag().contains("MULTIPLIER");
         FovAlgorithm fovC = new FovAlgorithm(sp);
         fovC.resetFov();
