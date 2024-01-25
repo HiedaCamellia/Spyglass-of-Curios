@@ -34,9 +34,11 @@ public class SpyglassUtil {
      * 根据tag判断望远镜是否在饰品槽内被使用
      */
     public static boolean isUsing(LivingEntity entity) {
-        Player player = (Player) entity;
-        ItemStack spyglass = new Finder.Curio(player).getSpyglass();
-        return spyglass.getOrCreateTag().getBoolean("using");
+        if (entity instanceof Player player) {
+            ItemStack spyglass = new Finder.Curio(player).getSpyglass();
+            return spyglass.getOrCreateTag().getBoolean("using");
+        }
+        return false;
     }
 
     /**

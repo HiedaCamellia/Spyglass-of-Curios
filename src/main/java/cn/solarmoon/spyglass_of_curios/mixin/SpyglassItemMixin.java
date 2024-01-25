@@ -41,9 +41,6 @@ public class SpyglassItemMixin extends Item implements ICurioItem {
         Player player = (Player) slotContext.entity();
         Level level = player.level();
 
-        //使用键位了就只能是客户端侧了
-        if (!level.isClientSide) return;
-
         player = Minecraft.getInstance().player != null ? Minecraft.getInstance().player : player;
         ISpyUser sp = (ISpyUser) player;
 
@@ -69,19 +66,17 @@ public class SpyglassItemMixin extends Item implements ICurioItem {
      */
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int delta, boolean flag) {
-        if (level.isClientSide) {
-            Player player = Minecraft.getInstance().player;
-            ISpyUser sp = (ISpyUser) player;
-            if (player != null) {
-                SpyglassUtil.Finder.Hand finder = new SpyglassUtil.Finder.Hand(player);
-                ItemStack spyglass = finder.getSpyglass();
-                InteractionHand hand = finder.getHand();
-                if (Keys.useSpyglass.isDown() && finder.hasSpyglass() && !player.isScoping()) {
-                    if (Minecraft.getInstance().gameMode != null) {
-                        Minecraft.getInstance().gameMode.useItem(player, hand);
-                    }
-                    SpyglassUtil.setFov(spyglass, level, sp);
+        Player player = Minecraft.getInstance().player;
+        ISpyUser sp = (ISpyUser) player;
+        if (player != null) {
+            SpyglassUtil.Finder.Hand finder = new SpyglassUtil.Finder.Hand(player);
+            ItemStack spyglass = finder.getSpyglass();
+            InteractionHand hand = finder.getHand();
+            if (Keys.useSpyglass.isDown() && finder.hasSpyglass() && !player.isScoping()) {
+                if (Minecraft.getInstance().gameMode != null) {
+                    Minecraft.getInstance().gameMode.useItem(player, hand);
                 }
+                SpyglassUtil.setFov(spyglass, level, sp);
             }
         }
         super.inventoryTick(stack, level, entity, delta, flag);

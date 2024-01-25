@@ -3,6 +3,7 @@ package cn.solarmoon.spyglass_of_curios.client;
 import cn.solarmoon.spyglass_of_curios.client.curios_renderer.SpyglassRenderer;
 import cn.solarmoon.spyglass_of_curios.client.event.ScrollingSet;
 import cn.solarmoon.spyglass_of_curios.client.event.SelectRender;
+import cn.solarmoon.spyglass_of_curios.client.event.SpyglassUseAndTick;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -23,6 +24,7 @@ public class SOCClientEvents {
         //事件
         MinecraftForge.EVENT_BUS.register(new SelectRender());
         MinecraftForge.EVENT_BUS.register(new ScrollingSet());
+        MinecraftForge.EVENT_BUS.register(new SpyglassUseAndTick());
         //饰品渲染
         CuriosRendererRegistry.register(ForgeRegistries.ITEMS.getValue(new ResourceLocation("minecraft:spyglass")), SpyglassRenderer::new);
     }
