@@ -35,8 +35,7 @@ public class SpyglassUseAndTick {
     public void cinema() {
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
-        if (mc.player != null) {
-            ISpyUser sp = (ISpyUser) player;
+        if (player instanceof ISpyUser sp) {
             if (Config.enableCinemaCamera.get()) {
                 Options options = mc.options;
                 if (!player.isScoping() && !cameraCheck) {

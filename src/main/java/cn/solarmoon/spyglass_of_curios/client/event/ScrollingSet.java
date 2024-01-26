@@ -17,23 +17,24 @@ public class ScrollingSet {
     public void onMouseScroll(InputEvent.MouseScrollingEvent event){
         Minecraft client = Minecraft.getInstance();
         LocalPlayer player = client.player;
-        ISpyUser sp = (ISpyUser) player;
-        if(player != null && player.isScoping() && client.options.getCameraType().isFirstPerson()){
+        if (player instanceof ISpyUser sp) {
+            if (player.isScoping() && client.options.getCameraType().isFirstPerson()) {
 
-            ItemStack spyglass = sp.getSpyglass();
+                ItemStack spyglass = sp.getSpyglass();
 
-            PacketRegister.sendPacket(sp.multiplier(), renderType, "soundRoll");
+                PacketRegister.sendPacket(sp.multiplier(), renderType, "soundRoll");
 
-            //调整倍率
-            FovAlgorithm fovC = new FovAlgorithm(sp);
-            double tagDouble = spyglass.getOrCreateTag().getDouble("MULTIPLIER");
-            fovC.setFov(tagDouble, event.getScrollDelta());
+                //调整倍率
+                FovAlgorithm fovC = new FovAlgorithm(sp);
+                double tagDouble = spyglass.getOrCreateTag().getDouble("MULTIPLIER");
+                fovC.setFov(tagDouble, event.getScrollDelta());
 
-            //发包(把倍率存入独立的望远镜NBT)
-            PacketRegister.sendPacket(fovC.putTag(), renderType, "spyglassPutNBT");
+                //发包(把倍率存入独立的望远镜NBT)
+                PacketRegister.sendPacket(fovC.putTag(), renderType, "spyglassPutNBT");
 
-            //防止滚轮触发别的操作
-            event.setCanceled(true);
+                //防止滚轮触发别的操作
+                event.setCanceled(true);
+            }
         }
     }
 }

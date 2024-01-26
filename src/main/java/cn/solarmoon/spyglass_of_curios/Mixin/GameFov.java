@@ -19,8 +19,7 @@ public class GameFov {
     @Inject(at = @At("HEAD"), method = "tickFov", cancellable = true)
     public void setFov(CallbackInfo ci) {
         Minecraft mc = Minecraft.getInstance();
-        if (null != mc.player && mc.player.isScoping() && mc.options.getCameraType().isFirstPerson()) {
-            ISpyUser sp = (ISpyUser) mc.player;
+        if ( (mc.player instanceof ISpyUser sp) && mc.player.isScoping() && mc.options.getCameraType().isFirstPerson()) {
             float f = (float) sp.multiplier();
             this.oldFov = this.fov;
             this.fov += (f - this.fov) * 0.5F;

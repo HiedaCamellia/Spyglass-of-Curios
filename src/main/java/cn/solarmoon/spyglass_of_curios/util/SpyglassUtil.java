@@ -7,7 +7,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.Level;
 import top.theillusivec4.curios.api.CuriosApi;
 
 import static cn.solarmoon.spyglass_of_curios.util.client.Constants.renderType;

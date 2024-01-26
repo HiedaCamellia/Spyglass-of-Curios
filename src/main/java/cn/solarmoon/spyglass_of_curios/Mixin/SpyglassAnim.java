@@ -18,10 +18,11 @@ public abstract class SpyglassAnim {
      */
     @Inject(method = "getArmPose", at = @At("HEAD"), cancellable = true)
     private static void getArmPose(AbstractClientPlayer player, InteractionHand hand, CallbackInfoReturnable<HumanoidModel.ArmPose> cir) {
-        ISpyUser sp = (ISpyUser) player;
-        if(sp.usingSpyglassInCurio()) {
-            if(hand.equals(InteractionHand.OFF_HAND)) cir.setReturnValue(HumanoidModel.ArmPose.SPYGLASS);
-            if(hand.equals(InteractionHand.MAIN_HAND)) cir.setReturnValue(HumanoidModel.ArmPose.EMPTY);
+        if (player instanceof ISpyUser sp) {
+            if (sp.usingSpyglassInCurio()) {
+                if (hand.equals(InteractionHand.OFF_HAND)) cir.setReturnValue(HumanoidModel.ArmPose.SPYGLASS);
+                if (hand.equals(InteractionHand.MAIN_HAND)) cir.setReturnValue(HumanoidModel.ArmPose.EMPTY);
+            }
         }
     }
 

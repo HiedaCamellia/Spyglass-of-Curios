@@ -44,7 +44,7 @@ public class SpyglassRenderer implements ICurioRenderer {
         Minecraft mc = Minecraft.getInstance();
         ItemRenderer itemRenderer = mc.getItemRenderer();
         LivingEntity living = slotContext.entity();
-        ISpyUser sp = (ISpyUser)living;
+        if (!(living instanceof ISpyUser sp)) return;
         Level level = living.level;
         BakedModel spyglass = itemRenderer.getModel(Items.SPYGLASS.getDefaultInstance(), level, living, 1);
         if (sp.usingSpyglassInCurio()) {

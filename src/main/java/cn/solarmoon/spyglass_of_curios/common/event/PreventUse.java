@@ -11,10 +11,10 @@ public class PreventUse {
      */
     @SubscribeEvent
     public void preventUse(LivingEntityUseItemEvent event) {
-        ISpyUser sp = (ISpyUser) event.getEntity();
-
-        if (sp.usingSpyglassInCurio() && event.isCancelable()) {
-            event.setCanceled(true);
+        if (event.getEntity() instanceof ISpyUser sp) {
+            if (sp.usingSpyglassInCurio() && event.isCancelable()) {
+                event.setCanceled(true);
+            }
         }
     }
 
