@@ -18,9 +18,8 @@ public class SelectRender {
     @SubscribeEvent
     public void setRenderType(PlayerInteractEvent.LeftClickEmpty event) {
         Player player = event.getEntity();
-        ISpyUser sp = (ISpyUser) player;
         if(Config.disableRenderAll.get()) return;
-        if (player != null && event.getItemStack().is(Items.SPYGLASS) && player.isCrouching()) {
+        if ( (player instanceof ISpyUser sp) && event.getItemStack().is(Items.SPYGLASS) && player.isCrouching()) {
             String[] renderTypes = {"back_waist", "head", "indescribable"};
             Boolean[] disableRenders = {Config.disableRenderBackWaist.get(), Config.disableRenderHead.get(), Config.disableRenderIndescribable.get()};
             if (Arrays.stream(disableRenders).allMatch(Boolean::booleanValue)) return;

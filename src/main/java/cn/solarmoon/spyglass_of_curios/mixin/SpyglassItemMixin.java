@@ -43,28 +43,27 @@ public class SpyglassItemMixin extends Item implements ICurioItem {
 
     @Override
     public void curioTick(SlotContext slotContext, ItemStack stack) {
-        Player player = (Player) slotContext.entity();
+        Player player = Minecraft.getInstance().player;
+        if (player instanceof ISpyUser sp) {
 
-        player = Minecraft.getInstance().player != null ? Minecraft.getInstance().player : player;
-        ISpyUser sp = (ISpyUser) player;
-
-        if (Keys.useSpyglass.isDown() && !player.isUsingItem() && !player.isScoping() && !sp.usingSpyglassInCurio()) {
-            SpyglassUtil.setFov(sp.getSpyglassInCurio(), sp);
-            PacketRegister.sendPacket(true, "using");
-            if (!onceCheck) {
-                PacketRegister.sendPacket("soundUse");
-                onceCheck = true;
+            if (Keys.useSpyglass.isDown() && !player.isUsingItem() && !player.isScoping() && !sp.usingSpyglassInCurio()) {
+                SpyglassUtil.setFov(sp.getSpyglassInCurio(), sp);
+                PacketRegister.sendPacket(true, "using");
+                if (!onceCheck) {
+                    PacketRegister.sendPacket("soundUse");
+                    onceCheck = true;
+                }
             }
-        }
 
-        if (!Keys.useSpyglass.isDown()) {
-            //保证一定是使用后才发声，否则会导致持续发声
-            //同时客户端单侧可能会因为一个sp的空按键导致执行，因此必须放入使用后的条件内
-            if (sp.usingSpyglassInCurio()) {
-                PacketRegister.sendPacket(false, "using");
-                if (onceCheck) {
-                    PacketRegister.sendPacket("soundStop");
-                    onceCheck = false;
+            if (!Keys.useSpyglass.isDown()) {
+                //保证一定是使用后才发声，否则会导致持续发声
+                //同时客户端单侧可能会因为一个sp的空按键导致执行，因此必须放入使用后的条件内
+                if (sp.usingSpyglassInCurio()) {
+                    PacketRegister.sendPacket(false, "using");
+                    if (onceCheck) {
+                        PacketRegister.sendPacket("soundStop");
+                        onceCheck = false;
+                    }
                 }
             }
         }
