@@ -63,17 +63,17 @@ public record SpyglassUsePacket(double multiplier, String renderType, boolean fl
                 }
                 case "soundRoll" -> {
                     float volume = (float) (1.0f + (1 * (1 - mul) * (1 - mul)));
-                    if(!level.isClientSide) level.playSound(null, player.getOnPos(), SoundEvents.SPYGLASS_STOP_USING, SoundSource.PLAYERS, volume, 1f);
+                    if(!level.isClientSide) level.playSound(null, player.getOnPos().above(), SoundEvents.SPYGLASS_STOP_USING, SoundSource.PLAYERS, volume, 1f);
                 }
                 case "using" -> {
                     ItemStack spyglass = new SpyglassUtil.Finder.Curio(player).getSpyglass();
                     spyglass.getOrCreateTag().putBoolean("using", flag);
                 }
                 case "soundUse" -> {
-                    level.playSound(null, player.getOnPos(), SoundEvents.SPYGLASS_USE, SoundSource.PLAYERS);
+                    level.playSound(null, player.getOnPos().above(), SoundEvents.SPYGLASS_USE, SoundSource.PLAYERS);
                 }
                 case "soundStop" -> {
-                    level.playSound(null, player.getOnPos(), SoundEvents.SPYGLASS_STOP_USING, SoundSource.PLAYERS, 1f, 1f);
+                    level.playSound(null, player.getOnPos().above(), SoundEvents.SPYGLASS_STOP_USING, SoundSource.PLAYERS);
                 }
             }
         });
