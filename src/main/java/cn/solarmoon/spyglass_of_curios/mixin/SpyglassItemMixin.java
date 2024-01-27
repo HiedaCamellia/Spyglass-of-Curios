@@ -76,8 +76,7 @@ public class SpyglassItemMixin extends Item implements ICurioItem {
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int delta, boolean flag) {
         Player player = Minecraft.getInstance().player;
-        ISpyUser sp = (ISpyUser) player;
-        if (player != null) {
+        if (player instanceof ISpyUser sp) {
             SpyglassUtil.Finder.Hand finder = new SpyglassUtil.Finder.Hand(player);
             ItemStack spyglass = finder.getSpyglass();
             InteractionHand hand = finder.getHand();

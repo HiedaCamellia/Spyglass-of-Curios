@@ -22,10 +22,11 @@ public abstract class RenderItem<T extends LivingEntity>{
     //按住时替换副手渲染
     @Inject(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/LivingEntity;FFFFFF)V", at = @At(value = "HEAD"), cancellable = true)
     public void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, T t, float p1, float p2, float p3, float p4, float p5, float p6, CallbackInfo ci) {
-        ISpyUser sp = (ISpyUser) t;
-        if (sp.usingSpyglassInCurio()) {
-            this.renderArmWithItem(t, t.getMainHandItem(), ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, HumanoidArm.RIGHT, poseStack, multiBufferSource, i);
-            ci.cancel();
+        if (t instanceof ISpyUser sp) {
+            if (sp.usingSpyglassInCurio()) {
+                this.renderArmWithItem(t, t.getMainHandItem(), ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, HumanoidArm.RIGHT, poseStack, multiBufferSource, i);
+                ci.cancel();
+            }
         }
     }
 
