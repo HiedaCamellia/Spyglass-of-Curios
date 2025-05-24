@@ -34,10 +34,14 @@ public class SpyglassUtil {
     public static boolean isUsing(LivingEntity entity) {
         if (entity instanceof Player player) {
             ItemStack spyglass = new Finder.Curio(player).getSpyglass();
-            // @debug
-//            if(spyglass.getTag()==null){
-//                return false;
-//            }
+            // 查找失败
+            if(ItemStack.EMPTY == spyglass){
+                return false;
+            }
+            // 解决ItemSplitBugFix不兼容问题，防止万一其他mod或者整合包加了个没tag的望远镜进去
+            if(spyglass.getTag()==null){
+                return false;
+            }
             return spyglass.getOrCreateTag().getBoolean("using");
         }
         return false;
