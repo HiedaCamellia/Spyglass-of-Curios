@@ -34,6 +34,10 @@ public class SpyglassUtil {
     public static boolean isUsing(LivingEntity entity) {
         if (entity instanceof Player player) {
             ItemStack spyglass = new Finder.Curio(player).getSpyglass();
+            // @debug
+//            if(spyglass.getTag()==null){
+//                return false;
+//            }
             return spyglass.getOrCreateTag().getBoolean("using");
         }
         return false;
