@@ -25,7 +25,12 @@ public abstract class RenderItem<T extends LivingEntity>{
     public void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, T t, float p1, float p2, float p3, float p4, float p5, float p6, CallbackInfo ci) {
         if (t instanceof ISpyUser sp) {
             if (sp.usingSpyglassInCurio()) {
-                this.renderArmWithItem(t, t.getMainHandItem(), ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, HumanoidArm.RIGHT, poseStack, multiBufferSource, i);
+                HumanoidArm arm = t.getMainArm();
+                ItemDisplayContext context = (arm == HumanoidArm.RIGHT)
+                        ? ItemDisplayContext.THIRD_PERSON_RIGHT_HAND
+                        : ItemDisplayContext.THIRD_PERSON_LEFT_HAND;
+
+                this.renderArmWithItem(t, t.getMainHandItem(), context, arm, poseStack, multiBufferSource, i);
                 ci.cancel();
             }
         }

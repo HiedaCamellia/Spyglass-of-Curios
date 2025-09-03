@@ -19,6 +19,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.client.ICurioRenderer;
+import net.minecraft.world.entity.HumanoidArm;
 
 
 public class SpyglassRenderer implements ICurioRenderer {
@@ -54,7 +55,12 @@ public class SpyglassRenderer implements ICurioRenderer {
             matrixStack.mulPose(Axis.YP.rotationDegrees(HeadYaw));
             matrixStack.mulPose(Axis.XP.rotationDegrees(Math.max(headPitch, -30)));
             matrixStack.mulPose(Axis.ZP.rotationDegrees(180.0F));
-            matrixStack.translate(-0.1, 0.21, -0.6);
+            matrixStack.translate(0, 0.21, -0.6);
+            if (living.getMainArm() == HumanoidArm.RIGHT) {
+                matrixStack.translate(-0.1, 0, 0);
+            } else {
+                matrixStack.translate(0.1, 0, 0);
+            }
             matrixStack.mulPose(Direction.SOUTH.getRotation());
             matrixStack.scale(1f, 1f, 1f);
         }
