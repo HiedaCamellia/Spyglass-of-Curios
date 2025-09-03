@@ -158,6 +158,13 @@ repositories {
     maven {
         url "https://api.modrinth.com/maven"
     }
+
+//    maven {
+//        url "https://cursemaven.com"
+//        content {
+//            includeGroup "curse.maven"
+//        }
+//    } // @debug
 }
 
 dependencies {
@@ -171,6 +178,8 @@ dependencies {
 
     //oculus
     compileOnly fg.deobf("maven.modrinth:oculus:${oculus_version}")
+
+    // runtimeOnly fg.deobf("curse.maven:item-split-bug-fix-1119284:5806246") // @debug
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
